@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Piotr">
+      <UniqueIdentifier>{8a6d7b9d-96e2-4df3-8ddf-55e9926e9432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Piotr\Math">
+      <UniqueIdentifier>{77861201-b84c-42a7-9e24-17a14629b308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Piotr\Utill">
+      <UniqueIdentifier>{3c9dd61a-0a6a-4a95-8d1c-3fc2e12e9852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Piotr\Template">
+      <UniqueIdentifier>{d5e1e4ae-89ea-4b1b-a5ee-980fcf0189da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -24,28 +36,58 @@
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="Output.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="piotr\utill\type.cpp">
+      <Filter>Piotr\Utill</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\argument_collection.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\real.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Output.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\utill\type.h">
+      <Filter>Piotr\Utill</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\argument.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\template\function_template.h">
+      <Filter>Piotr\Template</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\math_function.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\argument_collection.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\real.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\constant.h">
+      <Filter>Piotr\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

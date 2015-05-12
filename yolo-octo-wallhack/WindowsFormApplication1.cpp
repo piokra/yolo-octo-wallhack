@@ -1,8 +1,8 @@
 // WindowsFormApplication1.cpp : main project file.
 
-#include "stdafx.h"
 #include "Input.h"
 #include "Output.h"
+#include "piotr\utill\type.h"
 
 using namespace yolo_octo_wallhack;
 
