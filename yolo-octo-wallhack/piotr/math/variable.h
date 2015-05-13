@@ -1,6 +1,5 @@
-#ifndef PIOTR_MATH_CONSTANT_H
-#define PIOTR_MATH_CONSTANT_H
-
+#ifndef PIOTR_MATH_VARIABLE_H
+#define PIOTR_MATH_VARIABLE_H
 
 #include "math_function.h"
 
@@ -9,24 +8,18 @@ namespace Piotr
 	namespace Math
 	{
 		template<typename T>
-		class Constant : public GenericMathFunction
+		class Variable : public GenericMathFunction
 		{
 		public:
-			Constant(int size) : mOutput(size)
+			Variable(int size, int pos) : mOutput(size), mPos(pos)
 			{
-				
+				for (int i = 0; i < size; i++)
+					mOutput.set(i, new T);
 			};
-			void set(int i, T* t)
-			{
-				mOutput.set(i, t);
-			}
-			void set(ArgumentCollection arg)
-			{
-				mOutput.recycle();
-				mOutput = arg;
-			}
+
 			ArgumentCollection operator()(ArgumentCollection arg)
 			{
+				mOutput.set(mPos, arg.get(mPos)->clone());
 				return mOutput;
 			}
 			virtual ArgumentCollection getInputFormat()
@@ -36,11 +29,11 @@ namespace Piotr
 			}
 			virtual ArgumentCollection getOutputFormat()
 			{
-				ArgumentCollection ac;
-				return ac;
+				return mOutput;
 			}
 		private:
 			ArgumentCollection mOutput;
+			int mPos;
 		};
 	}
 }

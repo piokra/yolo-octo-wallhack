@@ -4,6 +4,11 @@ namespace Piotr
 {
 	namespace Math
 	{
+		ArgumentCollection::ArgumentCollection()
+		{
+			mSize = 0;
+			mArguments = 0;
+		}
 		ArgumentCollection::ArgumentCollection(int size)
 		{
 			mSize = size;
@@ -42,6 +47,7 @@ namespace Piotr
 			*/
 			int res = 0;
 			if (l.mSize != r.mSize) return PMA_BULLSHIT;
+			if (l.mArguments&&r.mArguments)
 			for (int i = 0; i < l.mSize; i++)
 			{
 				if (!(l.mArguments[i]->getType() == r.mArguments[i]->getType()))

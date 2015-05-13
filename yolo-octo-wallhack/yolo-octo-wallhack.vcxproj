@@ -94,7 +94,9 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="piotr\math\argument_collection.cpp" />
+    <ClCompile Include="piotr\math\interpreter.cpp" />
     <ClCompile Include="piotr\math\real.cpp" />
+    <ClCompile Include="piotr\math\variable.cpp" />
     <ClCompile Include="piotr\utill\type.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WindowsFormApplication1.cpp" />
@@ -109,8 +111,10 @@
     <ClInclude Include="piotr\math\argument.h" />
     <ClInclude Include="piotr\math\argument_collection.h" />
     <ClInclude Include="piotr\math\constant.h" />
+    <ClInclude Include="piotr\math\interpreter.h" />
     <ClInclude Include="piotr\math\math_function.h" />
     <ClInclude Include="piotr\math\real.h" />
+    <ClInclude Include="piotr\math\variable.h" />
     <ClInclude Include="piotr\template\function_template.h" />
     <ClInclude Include="piotr\utill\type.h" />
     <ClInclude Include="resource.h" />

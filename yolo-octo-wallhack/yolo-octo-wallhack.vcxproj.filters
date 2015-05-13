@@ -54,6 +54,12 @@
     <ClCompile Include="piotr\math\real.cpp">
       <Filter>Piotr\Math</Filter>
     </ClCompile>
+    <ClCompile Include="piotr\math\variable.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\interpreter.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -89,9 +95,18 @@
     <ClInclude Include="piotr\math\constant.h">
       <Filter>Piotr\Math</Filter>
     </ClInclude>
+    <ClInclude Include="piotr\math\variable.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\interpreter.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resX">
+    <EmbeddedResource Include="Input.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Output.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
   </ItemGroup>

@@ -1,9 +1,11 @@
 #pragma once
 
-#include "Output.h"
+
 #include "piotr/math/real.h"
 #include "piotr/math/argument_collection.h"
 #include "piotr/math/constant.h"
+#include "piotr/math/variable.h"
+#include "Output.h"
 
 namespace yolo_octo_wallhack {
 
@@ -177,7 +179,12 @@ private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  send
 	Output^ form = gcnew Output();
 	form->Show();
 	form->flushText();
+	ArgumentCollection t2(3);
 	ArgumentCollection t(0);
+	Variable<Real> variable(3,1);
+	t2.set(0, new Real(1));
+	t2.set(1, new Real(2));
+	t2.set(2, new Real(5));
 	Constant<Real> constant(3);
 	constant.set(0, new Real(1));
 	constant.set(1, new Real(1));
@@ -186,6 +193,9 @@ private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  send
 	t = constant(t);
 	form->pushLine(t.toString());
 	t.recycle();
+
+	t = variable(t2);
+	form->pushLine(t.toString());
 	/*for (int i = 0; i < textBox1->Lines->Length; i++)
 	{
 		array<String^>^ ta = textBox1->Lines;

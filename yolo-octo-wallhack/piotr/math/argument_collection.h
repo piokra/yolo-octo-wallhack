@@ -17,7 +17,7 @@ namespace Piotr
 		class ArgumentCollection
 		{
 		public:
-
+			ArgumentCollection();
 			ArgumentCollection(int size);
 			void set(int it, FunctionArgument* arg);
 			FunctionArgument* const get(int it) const;
