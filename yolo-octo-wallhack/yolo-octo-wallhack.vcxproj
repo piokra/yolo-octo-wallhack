@@ -102,6 +102,7 @@
     <ClCompile Include="WindowsFormApplication1.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\conversion.h" />
     <ClInclude Include="Input.h">
       <FileType>CppForm</FileType>
     </ClInclude>

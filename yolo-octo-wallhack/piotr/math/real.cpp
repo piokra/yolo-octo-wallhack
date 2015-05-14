@@ -1,5 +1,6 @@
 #include "real.h"
 #include <math.h>
+#include "../../conversion.h"
 namespace Piotr
 {
 	namespace Math
@@ -53,13 +54,9 @@ namespace Piotr
 			tr.value = pow(value,r.value);
 			return tr;
 		}
-		void Real::toString(System::String^& str)
-		{
-			/*
-				@TODO PROPER CONVERSION
-			*/
-			System::Double t = value;
-			str += t.ToString();
+		void Real::toString(std::string& str)
+		{			
+			str += tostr(value);
 		}
 	}
 }

@@ -5,10 +5,13 @@
 #include "piotr/math/argument_collection.h"
 #include "piotr/math/constant.h"
 #include "piotr/math/variable.h"
+#include "piotr/math/interpreter.h"
 #include "Output.h"
+#include "conversion.h"
+
 
 namespace yolo_octo_wallhack {
-
+	
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -17,6 +20,17 @@ namespace yolo_octo_wallhack {
 	using namespace System::Drawing;
 	using namespace Piotr;
 	using namespace Math;
+
+	inline std::string toStringFromManaged(System::String^ str)
+	{
+		std::string ret = "";
+
+		for (int i = 0; i < str->Length; i++)
+		{
+			ret += str[i];
+		}
+		return ret;
+	}
 
 	/// <summary>
 	/// Summary for Input
@@ -38,7 +52,8 @@ namespace yolo_octo_wallhack {
 
 			textBox1->Size = Drawing::Size(windowX - xPos, windowY - yPos);
 		}
-
+	private:
+		
 		/*
 		*	Custom code goes above 
 		*/
@@ -176,32 +191,21 @@ namespace yolo_octo_wallhack {
 	}
 
 private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-	Output^ form = gcnew Output();
-	form->Show();
-	form->flushText();
-	ArgumentCollection t2(3);
-	ArgumentCollection t(0);
-	Variable<Real> variable(3,1);
-	t2.set(0, new Real(1));
-	t2.set(1, new Real(2));
-	t2.set(2, new Real(5));
-	Constant<Real> constant(3);
-	constant.set(0, new Real(1));
-	constant.set(1, new Real(1));
-	constant.set(2, new Real(2));
 
-	t = constant(t);
-	form->pushLine(t.toString());
-	t.recycle();
-
-	t = variable(t2);
-	form->pushLine(t.toString());
-	/*for (int i = 0; i < textBox1->Lines->Length; i++)
+	StringInterpreter stringInterpreter;
+	Output^ o = gcnew Output();
+	o->Show();
+	for (int i = 0; i < textBox1->Lines->Length; i++)
 	{
-		array<String^>^ ta = textBox1->Lines;
-		String^ t = ta[i];
-		form->pushLine(t);
-	}*/
+		
+		stringInterpreter.compileLine(toStringFromManaged((String^)textBox1->Lines[i]));
+		o->pushLine((String^)textBox1->Lines[i]);
+		
+
+	}
+
+	stringInterpreter.showLog();
+	stringInterpreter.showResult();
 	
 }
 };

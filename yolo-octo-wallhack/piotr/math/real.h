@@ -22,7 +22,7 @@ namespace Piotr
 			Real operator-(const Real& r);
 			Real operator/(const Real& r);
 			Real operator^(const Real& r);
-			void toString(System::String^& str);
+			virtual void toString(std::string& str);
 			
 		};
 		

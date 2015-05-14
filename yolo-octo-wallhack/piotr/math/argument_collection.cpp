@@ -84,11 +84,15 @@ namespace Piotr
 			String^ t = L"[";
 			for (int i = 0; i < mSize - 1; i++)
 			{
-				mArguments[i]->toString(t);
+				std::string ts = "";
+				mArguments[i]->toString(ts);
+				t += gcnew String(ts.c_str());
 				t += L",";
 
 			}
-			mArguments[mSize-1]->toString(t);
+			std::string ts = "";
+			mArguments[mSize-1]->toString(ts);
+			t += gcnew String(ts.c_str());
 			t += L"]";
 			return t;
 		}

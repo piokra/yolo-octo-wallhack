@@ -1,5 +1,6 @@
 #pragma once
-
+#include <vector>
+#include <string>
 namespace yolo_octo_wallhack {
 
 	using namespace System;
@@ -41,6 +42,21 @@ namespace yolo_octo_wallhack {
 		void flushText()
 		{
 			textBox1->Text = L"";
+		}
+
+		Output(const std::vector<std::string>& strs)
+		{
+			InitializeComponent();
+			flushText();
+			for (int i = 0; i < strs.size(); i++)
+				pushLine(gcnew String(strs[i].c_str()));
+		}
+
+		Output(const std::string& str)
+		{
+			InitializeComponent(); 
+			flushText();
+			pushLine(gcnew String(str.c_str()));
 		}
 
 		/*

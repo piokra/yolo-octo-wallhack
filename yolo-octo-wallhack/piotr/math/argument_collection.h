@@ -2,6 +2,7 @@
 #define PIOTR_MATH_ARGUMENT_COLLECTION
 
 #include "argument.h"
+#include <memory>
 
 namespace Piotr
 {
@@ -16,6 +17,7 @@ namespace Piotr
 	{
 		class ArgumentCollection
 		{
+			//@TODO REPLACE WITH SHARED_PTRS
 		public:
 			ArgumentCollection();
 			ArgumentCollection(int size);

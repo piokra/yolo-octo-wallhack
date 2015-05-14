@@ -2,6 +2,7 @@
 #define PIO_MATH_ARGUMENT_H
 
 #include "../Utill/type.h"
+#include <string>
 
 namespace Piotr
 {
@@ -14,7 +15,7 @@ namespace Piotr
 		public:
 			virtual const Type& getType() = 0;
 			virtual FunctionArgument* clone() = 0;
-			virtual void toString(String^& str) = 0;
+			virtual void toString(std::string& str) = 0;
 		};
 
 	}

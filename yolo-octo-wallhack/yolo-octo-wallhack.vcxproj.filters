@@ -101,6 +101,9 @@
     <ClInclude Include="piotr\math\interpreter.h">
       <Filter>Piotr\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\conversion.h">
+      <Filter>Piotr\Utill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Input.resx">
