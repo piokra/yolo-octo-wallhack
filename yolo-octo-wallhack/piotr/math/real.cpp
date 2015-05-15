@@ -51,11 +51,16 @@ namespace Piotr
 		Real Real::operator ^ (const Real& r)
 		{
 			Real tr;
-			tr.value = pow(value,r.value);
+			tr.value = pow(value, r.value);
 			return tr;
 		}
+		Real Real::operator = (const Real& r)
+		{
+			value = r.value;
+			return *this;
+		}
 		void Real::toString(std::string& str)
-		{			
+		{
 			str += tostr(value);
 		}
 	}

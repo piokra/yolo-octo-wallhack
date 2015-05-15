@@ -17,11 +17,12 @@ namespace Piotr
 			double value;
 			virtual const Type& getType();
 			virtual FunctionArgument* clone();
-			Real operator+(const Real& r);
-			Real operator*(const Real& r);
-			Real operator-(const Real& r);
-			Real operator/(const Real& r);
-			Real operator^(const Real& r);
+			virtual Real operator+(const Real& r);
+			virtual Real operator*(const Real& r);
+			virtual Real operator-(const Real& r);
+			virtual Real operator/(const Real& r);
+			virtual Real operator^(const Real& r);
+			virtual Real operator=(const Real& r);
 			virtual void toString(std::string& str);
 			
 		};

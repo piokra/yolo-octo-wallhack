@@ -198,12 +198,12 @@ private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  send
 	for (int i = 0; i < textBox1->Lines->Length; i++)
 	{
 		
-		stringInterpreter.compileLine(toStringFromManaged((String^)textBox1->Lines[i]));
+		stringInterpreter.pushLine(toStringFromManaged((String^)textBox1->Lines[i]));
 		o->pushLine((String^)textBox1->Lines[i]);
 		
 
 	}
-
+	stringInterpreter.run();
 	stringInterpreter.showLog();
 	stringInterpreter.showResult();
 	
