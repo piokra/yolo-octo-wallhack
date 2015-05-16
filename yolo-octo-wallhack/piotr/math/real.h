@@ -17,12 +17,14 @@ namespace Piotr
 			double value;
 			virtual const Type& getType();
 			virtual FunctionArgument* clone();
-			virtual Real operator+(const Real& r);
-			virtual Real operator*(const Real& r);
-			virtual Real operator-(const Real& r);
-			virtual Real operator/(const Real& r);
-			virtual Real operator^(const Real& r);
-			virtual Real operator=(const Real& r);
+
+			virtual ManagedArgument operator+(ManagedArgument r);
+			virtual ManagedArgument operator*(ManagedArgument r);
+			virtual ManagedArgument operator-(ManagedArgument r);
+			virtual ManagedArgument operator/(ManagedArgument r);
+			virtual ManagedArgument operator^(ManagedArgument r);
+			virtual ManagedArgument operator=(ManagedArgument r);
+
 			virtual void toString(std::string& str);
 			
 		};

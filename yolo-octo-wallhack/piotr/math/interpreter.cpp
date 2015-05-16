@@ -7,12 +7,27 @@ namespace Piotr
 {
 	namespace Math
 	{
+		using CompilerFunction = void (StringInterpreter::*)(const std::string&);
+		using ManagedArgument = std::shared_ptr < FunctionArgument >;
 		using namespace System;
+		using namespace yolo_octo_wallhack;
 		StringInterpreter::StringInterpreter()
 		{
 			mKeywords["Real"] = &StringInterpreter::allocateReal;
 			mKeywords["DisplayReal"] = &StringInterpreter::displayReal;
-			mKeywords["Set"] = &StringInterpreter::setReal;
+			mKeywords["Set"] = &StringInterpreter::set;
+
+			mOperators["+"] = &FunctionArgument::operator+;
+			mOperators["*"] = &FunctionArgument::operator*;
+			mOperators["-"] = &FunctionArgument::operator-;
+			mOperators["/"] = &FunctionArgument::operator/;
+			mOperators["^"] = &FunctionArgument::operator^;
+			//mOperators["="] = &FunctionArgument::operator=;
+		}
+
+		StringInterpreter::~StringInterpreter()
+		{
+
 		}
 
 		void StringInterpreter::run()
@@ -174,11 +189,11 @@ namespace Piotr
 			mResult.push_back(ts);
 		}
 
-		void StringInterpreter::setReal(const std::string& str)
+		void StringInterpreter::set(const std::string& str)
 		{
 			static const std::string TAG = "setReal: ";
 			std::vector<std::string> t = seperateWords(str," ", "");
-			if (t.size() != 3)
+			if (t.size() < 3)
 			{
 				mLog.push_back(TAG + "Invalid size. Did not set.");
 				return;
@@ -189,32 +204,22 @@ namespace Piotr
 				mLog.push_back(TAG + "No such variable.");
 				return;
 			}
-			Real* real = (Real*)it->second.get();
+			ManagedArgument left = toArgument(t[1]);
+			std::string rest = "";
+			for (int i = 2; i < t.size(); i++)
+				rest += t[i];
 			
-			//try to find variable 2
+			
+			std::vector<std::string> rpn = toRPN(rest);
+			/*
+			Output^ o = gcnew Output(rpn);
+			o->Show();
+			*/
+			ManagedArgument right = resolveRPN(rpn);
 
-			it = mVariables.find(t[2]);
-			if (it == mVariables.end())
-			{
-				//try to cast to double
-				//@TODO not managed cast
+			(*left).operator=(right);
 
-				double td;
-				String^ tms = gcnew String(t[2].c_str());
-				if (!Double::TryParse(tms, td))
-				{
-					mLog.push_back(TAG + "Failed to parse real. ");
-					return;
-				}
-				mLog.push_back(TAG + "Parsed real properly.");
-				real->value = td;
-				return;
 
-			}
-			Real* real2 = (Real*)it->second.get();
-			real->value = real2->value;
-			mLog.push_back(TAG + "Ok.");
-			//variable 2 found
 
 			
 		}
@@ -403,7 +408,27 @@ namespace Piotr
 			return false;
 		}
 
+		ManagedArgument StringInterpreter::toArgument(const std::string& str)
+		{
+			auto it = mVariables.find(str);
+			if (it != mVariables.end())
+			{
+				return it->second;
+			}
+			//try casting to a Real
+			if (isNumber(str))
+			{
+				//@TODO proper conversion
+				double val = Double::Parse(gcnew String(str.c_str()));
+				ManagedArgument p = ManagedArgument(new Real(val));
+				return p;
+			}
+			mLog.push_back("Failed to convert.");
+			exit(1);
+			return ManagedArgument();
 
+
+		}
 		std::vector<std::string> StringInterpreter::toRPN(const std::string& str)
 		{
 			//@TODO check for errors
@@ -498,7 +523,37 @@ namespace Piotr
 				
 			return exitqueue;
 		}
+		OperatorPointer StringInterpreter::toOperatorPointer(const std::string& str)
+		{
+			return mOperators[str];
+		}
+		ManagedArgument StringInterpreter::resolveRPN(const std::vector<std::string>& rpn)
+		{
+			//@TODO functions
+			
+			ManagedArgument a, b;
+			std::stack<ManagedArgument> stack;
+			for (int i = 0; i < rpn.size(); i++)
+			{
+				if (isOperator(rpn[i]))
+				{
+					a = stack.top();
+					stack.pop();
+					b = stack.top();
+					stack.pop();
+					OperatorPointer op = toOperatorPointer(rpn[i]);
+					stack.push(((*b).*op)(a));
+					
+				}
+				else
+				{
+					stack.push(toArgument(rpn[i]));
+				}
 
+				
+			}
+			return stack.top();
+		}
 	}
 
 }

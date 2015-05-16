@@ -59,7 +59,7 @@ int main(array<System::String ^> ^args)
 	Application::SetCompatibleTextRenderingDefault(false); 
 	//SITestFunction();
 	// Create the main window and run it
-	SITestFunction();
+	//SITestFunction();
 	Application::Run(gcnew Input());
 	return 0;
 }

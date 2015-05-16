@@ -132,7 +132,7 @@ namespace yolo_octo_wallhack {
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(102, 24);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(175, 24);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::exitToolStripMenuItem_Click);
 			// 
@@ -155,6 +155,9 @@ namespace yolo_octo_wallhack {
 			this->textBox1->AcceptsReturn = true;
 			this->textBox1->AcceptsTab = true;
 			this->textBox1->AllowDrop = true;
+			this->textBox1->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(3) { L"Real", L"DisplayReal", L"Set" });
+			this->textBox1->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+			this->textBox1->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox1->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));

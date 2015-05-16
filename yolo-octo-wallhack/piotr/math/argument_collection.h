@@ -15,15 +15,17 @@ namespace Piotr
 #define PMA_BULLSHIT 0xFFFF
 	namespace Math
 	{
+		using ManagedArguments = std::shared_ptr < FunctionArgument >* ;
+		using ManagedArgument = std::shared_ptr < FunctionArgument > ;
 		class ArgumentCollection
 		{
 			//@TODO REPLACE WITH SHARED_PTRS
 		public:
 			ArgumentCollection();
 			ArgumentCollection(int size);
-			void set(int it, FunctionArgument* arg);
-			FunctionArgument* const get(int it) const;
-			FunctionArgument* getEditable(int it);
+			void set(int it, ManagedArgument arg);
+			ManagedArgument const get(int it) const;
+			ManagedArgument getEditable(int it);
 			void recycle();
 
 			int getSize() const;
@@ -35,7 +37,8 @@ namespace Piotr
 
 			System::String^ toString();
 		private:
-			FunctionArgument** mArguments;
+			ManagedArguments mArguments;
+
 			int mSize;
 		};
 	}

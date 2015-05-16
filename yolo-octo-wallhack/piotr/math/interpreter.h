@@ -12,13 +12,18 @@ namespace Piotr
 	namespace Math
 	{
 
+		class StringInterpreter;
+		using CompilerFunction = void (StringInterpreter::*)(const std::string&);
+		using ManagedArgument = std::shared_ptr < FunctionArgument >;
+		using OperatorPointer = ManagedArgument(FunctionArgument::*)(ManagedArgument);
+
 		class StringInterpreter
 		{
 			friend void SITestFunction();
-			using CompilerFunction = void (StringInterpreter::*)(const std::string&);
-			using ManagedArgument = std::shared_ptr < FunctionArgument > ;
+
 		public:
 			StringInterpreter();
+			virtual ~StringInterpreter();
 
 			void run();
 			void showLog();
@@ -35,7 +40,7 @@ namespace Piotr
 			
 			void allocateReal(const std::string& str);
 			void displayReal(const std::string& str);
-			void setReal(const std::string& str);
+			void set(const std::string& str);
 
 			bool isNumber(const std::string& str);
 			bool isVariable(const std::string& str);
@@ -43,11 +48,19 @@ namespace Piotr
 			int getOperatorPrecedence(const std::string& str);
 			bool isLeftAssociative(const std::string& left, const std::string& right);
 			bool isRightAssociative(const std::string& left, const std::string& right);
+			
+			ManagedArgument toArgument(const std::string& str);
+			OperatorPointer toOperatorPointer(const std::string& str);
 			std::vector<std::string> toRPN(const std::string& str);
+			ManagedArgument resolveRPN(const std::vector<std::string>& rpn);
 		private:
 			std::vector<std::string> mCode;
 			int mCurrentLine;
+			
+			//@TODO make static and constant?
 			std::unordered_map<std::string, CompilerFunction> mKeywords;
+			//@TODO make static and constant?
+			std::unordered_map<std::string, OperatorPointer> mOperators;
 			std::unordered_map<std::string, ManagedArgument> mVariables;
 			std::vector<std::string> mResult;
 			std::vector<std::string> mLog;

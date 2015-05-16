@@ -24,40 +24,63 @@ namespace Piotr
 			r->value = value;
 			return r;
 		}
-		Real Real::operator + (const Real& r)
+		ManagedArgument Real::operator+(ManagedArgument r)
 		{
-			Real tr;
-			tr.value = r.value + value;
-			return tr;
+			if (!(r->getType() == getType()))
+				return ManagedArgument();
+			Real* rr = (Real*)r.get();
+			Real* tr = new Real;
+			tr->value = rr->value + value;
+			return ManagedArgument(tr);
 		}
-		Real Real::operator * (const Real& r)
+		ManagedArgument Real::operator*(ManagedArgument r)
 		{
-			Real tr;
-			tr.value = r.value * value;
-			return tr;
+			if (!(r->getType() == getType()))
+				return ManagedArgument();
+			Real* rr = (Real*)r.get();
+			Real* tr = new Real;
+			tr->value = rr->value * value;
+			return ManagedArgument(tr);
 		}
-		Real Real::operator - (const Real& r)
+		ManagedArgument Real::operator-(ManagedArgument r)
 		{
-			Real tr;
-			tr.value = r.value - value;
-			return tr;
+			if (!(r->getType() == getType()))
+				return ManagedArgument();
+			Real* rr = (Real*)r.get();
+			Real* tr = new Real;
+			tr->value = rr->value - value;
+			return ManagedArgument(tr);
 		}
-		Real Real::operator / (const Real& r)
+		ManagedArgument Real::operator/(ManagedArgument r)
 		{
-			Real tr;
-			tr.value = r.value / value;
-			return tr;
+			if (!(r->getType() == getType()))
+				return ManagedArgument();
+			Real* rr = (Real*)r.get();
+
+			Real* tr = new Real;
+			tr->value = rr->value / value;
+			return ManagedArgument(tr);
 		}
-		Real Real::operator ^ (const Real& r)
+		ManagedArgument Real::operator^(ManagedArgument r)
 		{
-			Real tr;
-			tr.value = pow(value, r.value);
-			return tr;
+			if (!(r->getType() == getType()))
+				return ManagedArgument();
+			Real* rr = (Real*)r.get();
+
+			Real* tr = new Real;
+			tr->value = pow(value, rr->value);
+			return ManagedArgument(tr);
 		}
-		Real Real::operator = (const Real& r)
+		ManagedArgument Real::operator=(ManagedArgument r)
 		{
-			value = r.value;
-			return *this;
+			if (!(r->getType() == getType()))
+				return ManagedArgument();
+			Real* rr = (Real*)r.get();
+
+			value = rr->value;
+			//This is invalid
+			//return ManagedArgument(this);
+			return ManagedArgument();
 		}
 		void Real::toString(std::string& str)
 		{

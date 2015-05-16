@@ -12,14 +12,12 @@ namespace Piotr
 		ArgumentCollection::ArgumentCollection(int size)
 		{
 			mSize = size;
-			mArguments = new FunctionArgument*[size];
+			mArguments = new std::shared_ptr<FunctionArgument>[size];
 			for (int i = 0; i < mSize; i++)
 				mArguments[i] = 0;
 		}
 		void ArgumentCollection::recycle()
 		{
-			for (int i = 0; i < mSize; i++)
-				if (mArguments[i]) delete mArguments[i];
 			delete[] mArguments;
 		}
 
@@ -27,7 +25,7 @@ namespace Piotr
 		{
 			ArgumentCollection r(mSize);
 			for (int i = 0; i < mSize; i++)
-				r.set(i, mArguments[i]->clone());
+				r.set(i, ManagedArgument(mArguments[i]->clone()));
 			return r;
 		}
 
@@ -36,8 +34,7 @@ namespace Piotr
 			if (ac.getSize() != mSize) return;
 			for (int i = 0; i < mSize; i++)
 			{
-				if (get(i)) delete get(i);
-				set(i, ac.get(i)->clone());
+				set(i, ManagedArgument(ac.get(i)->clone()));
 			}
 		}
 		int compare(const ArgumentCollection& l, const ArgumentCollection& r)
@@ -56,21 +53,20 @@ namespace Piotr
 			if (res) return PMA_BULLSHIT;
 			return PMA_SAME_TYPE;
 		}
-		FunctionArgument* const ArgumentCollection::get(int it) const
+		ManagedArgument const ArgumentCollection::get(int it) const
 		{
 			if (mSize <= it) return 0;
 			return mArguments[it];
 		}
-		FunctionArgument* ArgumentCollection::getEditable(int it) 
+		ManagedArgument ArgumentCollection::getEditable(int it) 
 		{
 			if (mSize <= it) return 0;
 			return mArguments[it];
 		}
 
-		void ArgumentCollection::set(int it, FunctionArgument* arg)
+		void ArgumentCollection::set(int it, ManagedArgument arg)
 		{
 			if (mSize <= it) return;
-			if (mArguments[it]) delete mArguments[it];
 			mArguments[it] = arg;
 		}
 
