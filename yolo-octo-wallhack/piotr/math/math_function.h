@@ -6,15 +6,29 @@
 #include "argument.h"
 #include "argument_collection.h"
 #include <vector>
+
 namespace Piotr
 {
 	namespace Math
 	{
 		using namespace Template;
-		class GenericMathFunction : public FunctionalObject<ArgumentCollection(ArgumentCollection)>//, public FunctionArgument
+		class GenericMathFunction : public FunctionalObject<ManagedArgument(ManagedArgument)>, public FunctionArgument
 		{
-			virtual ArgumentCollection getInputFormat() = 0;
-			virtual ArgumentCollection getOutputFormat() = 0;
+		public:
+			//@TODO actually implement this
+			//virtual ArgumentCollection getInputFormat() = 0;
+			//virtual ArgumentCollection getOutputFormat() = 0;
+
+			ManagedArgument tryCasting(ManagedArgument arg);
+
+			virtual ManagedArgument operator+(ManagedArgument r);
+			virtual ManagedArgument operator*(ManagedArgument r);
+			virtual ManagedArgument operator-(ManagedArgument r);
+			virtual ManagedArgument operator/(ManagedArgument r);
+			virtual ManagedArgument operator^(ManagedArgument r);
+			virtual ManagedArgument operator=(ManagedArgument r);
+
+			virtual const Type& getType();
 		};
 	}
 }

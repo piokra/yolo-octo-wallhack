@@ -8,24 +8,26 @@ namespace Piotr
 {
 	namespace Math
 	{
-		template<typename T>
+		//@TODO refactor
 		class Constant : public GenericMathFunction
 		{
+			friend class Constant;
 		public:
-			Constant(int size) : mOutput(size)
+			Constant(int size) : mSize(size)
 			{
-				
-			};
-			void set(int i, T* t)
-			{
-				mOutput.set(i, t);
+				ArgumentCollection* ac = new ArgumentCollection(size);
+				mOutput = ManagedArgument(ac);
 			}
-			void set(ArgumentCollection arg)
+			void set(int i, ManagedArgument t)
 			{
-				mOutput.recycle();
+				ArgumentCollection* ac = (ArgumentCollection*)(mOutput.get());
+				ac->set(i, t);
+			}
+			void set(ManagedArgument arg)
+			{
 				mOutput = arg;
 			}
-			ArgumentCollection operator()(ArgumentCollection arg)
+			virtual ManagedArgument operator()(ManagedArgument arg)
 			{
 				return mOutput;
 			}
@@ -39,8 +41,19 @@ namespace Piotr
 				ArgumentCollection ac;
 				return ac;
 			}
+			virtual ManagedArgument clone()
+			{
+				Constant* t = new Constant(mSize);
+				t->mOutput = mOutput->clone();
+				return ManagedArgument(t);
+			}
+			virtual void toString(std::string& str)
+			{
+				mOutput->toString(str);
+			}
 		private:
-			ArgumentCollection mOutput;
+			int mSize;
+			ManagedArgument mOutput;
 		};
 	}
 }

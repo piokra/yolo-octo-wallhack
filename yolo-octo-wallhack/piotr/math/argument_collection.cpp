@@ -1,9 +1,21 @@
 #include "argument_collection.h"
-
+#include "../../Input.h"
 namespace Piotr
 {
 	namespace Math
 	{
+
+		//@todo remove
+		inline std::string toStringFromManaged(System::String^ str)
+		{
+			std::string ret = "";
+
+			for (int i = 0; i < str->Length; i++)
+			{
+				ret += str[i];
+			}
+			return ret;
+		}
 		ArgumentCollection::ArgumentCollection()
 		{
 			mSize = 0;
@@ -21,12 +33,17 @@ namespace Piotr
 			delete[] mArguments;
 		}
 
-		ArgumentCollection ArgumentCollection::clone() const
+		ManagedArgument ArgumentCollection::clone()
 		{
-			ArgumentCollection r(mSize);
+			ArgumentCollection* r = new ArgumentCollection(mSize);
 			for (int i = 0; i < mSize; i++)
-				r.set(i, ManagedArgument(mArguments[i]->clone()));
-			return r;
+				r->set(i, ManagedArgument(mArguments[i]->clone()));
+			return ManagedArgument(r);
+		}
+
+		int ArgumentCollection::getSize()
+		{
+			return mSize;
 		}
 
 		void ArgumentCollection::copyFrom(const ArgumentCollection& ac)
@@ -36,6 +53,51 @@ namespace Piotr
 			{
 				set(i, ManagedArgument(ac.get(i)->clone()));
 			}
+		}
+
+		ManagedArgument ArgumentCollection::operator+(ManagedArgument r)
+		{
+			ArgumentCollection ac(mSize);
+			for (int i = 0; i < mSize; i++)
+			{
+				ac.set(i, mArguments[i]->operator+(r->operator[](i)));
+			}
+			return ManagedArgument(ac.clone());
+		}
+		ManagedArgument ArgumentCollection::operator*(ManagedArgument r)
+		{
+			ArgumentCollection ac(mSize);
+			for (int i = 0; i < mSize; i++)
+			{
+				ac.set(i, mArguments[i]->operator*(r->operator[](i)));
+			}
+			return ManagedArgument(ac.clone());
+		}
+		ManagedArgument ArgumentCollection::operator-(ManagedArgument r)
+		{
+			ArgumentCollection ac(mSize);
+			for (int i = 0; i < mSize; i++)
+			{
+				ac.set(i, mArguments[i]->operator-(r->operator[](i)));
+			}
+			return ManagedArgument(ac.clone());
+		}
+		ManagedArgument ArgumentCollection::operator/(ManagedArgument r)
+		{
+			return ManagedArgument(new ArgumentCollection(*this));
+		}
+		ManagedArgument ArgumentCollection::operator^(ManagedArgument r)
+		{
+			return ManagedArgument(new ArgumentCollection(*this));
+		};
+		ManagedArgument ArgumentCollection::operator=(ManagedArgument r)
+		{
+			(*this) = *(ArgumentCollection*)(r.get());
+			return ManagedArgument(new ArgumentCollection(*this));
+		}
+		ManagedArgument ArgumentCollection::operator[](int i)
+		{
+			return mArguments[i];
 		}
 		int compare(const ArgumentCollection& l, const ArgumentCollection& r)
 		{
@@ -91,6 +153,17 @@ namespace Piotr
 			t += gcnew String(ts.c_str());
 			t += L"]";
 			return t;
+		}
+
+		void ArgumentCollection::toString(std::string& str)
+		{
+			str += toStringFromManaged(toString());
+		}
+
+		const Type& ArgumentCollection::getType()
+		{
+			const static Type type("ARGUMENT_COLLECTION");
+			return type;
 		}
 
 	}

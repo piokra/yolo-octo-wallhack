@@ -16,7 +16,7 @@ namespace Piotr
 			Real(double x);
 			double value;
 			virtual const Type& getType();
-			virtual FunctionArgument* clone();
+			virtual ManagedArgument clone();
 
 			virtual ManagedArgument operator+(ManagedArgument r);
 			virtual ManagedArgument operator*(ManagedArgument r);

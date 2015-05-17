@@ -2,38 +2,49 @@
 #define PIOTR_MATH_VARIABLE_H
 
 #include "math_function.h"
-
+#include "../../conversion.h"
 namespace Piotr
 {
 	namespace Math
 	{
-		template<typename T>
+		//@TODO refactorize
 		class Variable : public GenericMathFunction
 		{
 		public:
-			Variable(int size, int pos) : mOutput(size), mPos(pos)
+			Variable(int size, int pos) : mPos(pos), mSize(size)
 			{
-				for (int i = 0; i < size; i++)
-					mOutput.set(i, new T);
+				
 			};
 
-			ArgumentCollection operator()(ArgumentCollection arg)
+			virtual ManagedArgument operator()(ManagedArgument arg)
 			{
-				mOutput.set(mPos, arg.get(mPos)->clone());
-				return mOutput;
+				return arg->operator[](mPos);
+				
 			}
-			virtual ArgumentCollection getInputFormat()
+			/*virtual	ManagedArgument getInputFormat()
 			{
-				ArgumentCollection ac;
-				return ac;
-			}
-			virtual ArgumentCollection getOutputFormat()
+				//ArgumentCollection ac;
+				//return ac;
+			}*/
+			/*
+			virtual ManagedArgument getOutputFormat()
 			{
 				return mOutput;
 			}
 		private:
-			ArgumentCollection mOutput;
+			ManagedArgument mOutput;*/
+		private:
 			int mPos;
+			int mSize;
+			virtual ManagedArgument clone()
+			{
+				return ManagedArgument(new Variable(mSize, mPos));
+			}
+			virtual void toString(std::string& str)
+			{
+				str += "x";
+				str += tostr(mPos);
+			}
 		};
 	}
 }

@@ -93,9 +93,14 @@
     </ClCompile>
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Output.cpp" />
+    <ClCompile Include="piotr\math\argument.cpp" />
     <ClCompile Include="piotr\math\argument_collection.cpp" />
     <ClCompile Include="piotr\math\interpreter.cpp" />
+    <ClCompile Include="piotr\math\math_function.cpp" />
+    <ClCompile Include="piotr\math\multiplictionoffunctions.cpp" />
+    <ClCompile Include="piotr\math\poweroffunctions.cpp" />
     <ClCompile Include="piotr\math\real.cpp" />
+    <ClCompile Include="piotr\math\sumoffunctions.cpp" />
     <ClCompile Include="piotr\math\variable.cpp" />
     <ClCompile Include="piotr\utill\type.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -114,7 +119,10 @@
     <ClInclude Include="piotr\math\constant.h" />
     <ClInclude Include="piotr\math\interpreter.h" />
     <ClInclude Include="piotr\math\math_function.h" />
+    <ClInclude Include="piotr\math\multiplictionoffunctions.h" />
+    <ClInclude Include="piotr\math\poweroffunctions.h" />
     <ClInclude Include="piotr\math\real.h" />
+    <ClInclude Include="piotr\math\sumoffunctions.h" />
     <ClInclude Include="piotr\math\variable.h" />
     <ClInclude Include="piotr\template\function_template.h" />
     <ClInclude Include="piotr\utill\type.h" />

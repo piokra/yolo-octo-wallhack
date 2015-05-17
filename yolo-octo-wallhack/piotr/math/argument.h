@@ -15,9 +15,12 @@ namespace Piotr
 		class FunctionArgument
 		{
 		public:
+			virtual ~FunctionArgument();
 			virtual const Type& getType() = 0;
-			virtual FunctionArgument* clone() = 0;
+			virtual ManagedArgument clone() = 0;
 			virtual void toString(std::string& str) = 0;
+
+			virtual int getSize();
 
 			virtual ManagedArgument operator+(ManagedArgument r) = 0;
 			virtual ManagedArgument operator*(ManagedArgument r) = 0;
@@ -25,6 +28,7 @@ namespace Piotr
 			virtual ManagedArgument operator/(ManagedArgument r) = 0;
 			virtual ManagedArgument operator^(ManagedArgument r) = 0;
 			virtual ManagedArgument operator=(ManagedArgument r) = 0;
+			virtual ManagedArgument operator[](int i);
 		};
 
 	}

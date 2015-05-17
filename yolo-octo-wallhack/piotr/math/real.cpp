@@ -18,11 +18,11 @@ namespace Piotr
 		{
 			return mType;
 		}
-		FunctionArgument* Real::clone()
+		ManagedArgument Real::clone()
 		{
 			Real* r = new Real;
 			r->value = value;
-			return r;
+			return ManagedArgument(r);
 		}
 		ManagedArgument Real::operator+(ManagedArgument r)
 		{

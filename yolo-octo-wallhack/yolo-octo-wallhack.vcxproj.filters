@@ -60,6 +60,21 @@
     <ClCompile Include="piotr\math\interpreter.cpp">
       <Filter>Piotr\Math</Filter>
     </ClCompile>
+    <ClCompile Include="piotr\math\argument.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\sumoffunctions.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\multiplictionoffunctions.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\poweroffunctions.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\math_function.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -103,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="..\conversion.h">
       <Filter>Piotr\Utill</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\sumoffunctions.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\multiplictionoffunctions.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\poweroffunctions.h">
+      <Filter>Piotr\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

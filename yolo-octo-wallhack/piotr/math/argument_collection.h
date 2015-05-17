@@ -17,12 +17,13 @@ namespace Piotr
 	{
 		using ManagedArguments = std::shared_ptr < FunctionArgument >* ;
 		using ManagedArgument = std::shared_ptr < FunctionArgument > ;
-		class ArgumentCollection
+		class ArgumentCollection : public FunctionArgument
 		{
-			//@TODO REPLACE WITH SHARED_PTRS
+			//@done @TODO REPLACE WITH SHARED_PTRS
 		public:
 			ArgumentCollection();
 			ArgumentCollection(int size);
+			virtual int getSize();
 			void set(int it, ManagedArgument arg);
 			ManagedArgument const get(int it) const;
 			ManagedArgument getEditable(int it);
@@ -30,12 +31,23 @@ namespace Piotr
 
 			int getSize() const;
 
-			ArgumentCollection clone() const;
+			virtual ManagedArgument clone();
 			void copyFrom(const ArgumentCollection& ac);
 
 			friend int compare(const ArgumentCollection& l, const ArgumentCollection& r);
 
 			System::String^ toString();
+			void toString(std::string& str);
+
+			//Standard argument operators
+			virtual ManagedArgument operator+(ManagedArgument r);
+			virtual ManagedArgument operator*(ManagedArgument r);
+			virtual ManagedArgument operator-(ManagedArgument r);
+			virtual ManagedArgument operator/(ManagedArgument r);
+			virtual ManagedArgument operator^(ManagedArgument r);
+			virtual ManagedArgument operator=(ManagedArgument r);
+			virtual ManagedArgument operator[](int i);
+			virtual const Type& getType();
 		private:
 			ManagedArguments mArguments;
 

@@ -31,7 +31,6 @@ namespace yolo_octo_wallhack {
 		}
 		return ret;
 	}
-
 	/// <summary>
 	/// Summary for Input
 	/// </summary>
@@ -203,7 +202,7 @@ private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  send
 	{
 		
 		stringInterpreter.pushLine(toStringFromManaged((String^)textBox1->Lines[i]));
-	
+		
 		
 
 	}
