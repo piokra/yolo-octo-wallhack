@@ -132,7 +132,7 @@ namespace yolo_octo_wallhack {
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(175, 24);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(102, 24);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::exitToolStripMenuItem_Click);
 			// 
@@ -155,18 +155,20 @@ namespace yolo_octo_wallhack {
 			this->textBox1->AcceptsReturn = true;
 			this->textBox1->AcceptsTab = true;
 			this->textBox1->AllowDrop = true;
-			this->textBox1->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(3) { L"Real", L"DisplayReal", L"Set" });
+			this->textBox1->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(4) {
+				L"Real", L"DisplayReal", L"Set",
+					L"Alibababa"
+			});
 			this->textBox1->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-			this->textBox1->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
+			this->textBox1->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::AllSystemSources;
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox1->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->textBox1->Font = (gcnew System::Drawing::Font(L"Consolas", 16.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->textBox1->Location = System::Drawing::Point(0, 31);
 			this->textBox1->Multiline = true;
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(282, 223);
 			this->textBox1->TabIndex = 1;
-			this->textBox1->Text = L"a";
 			// 
 			// Input
 			// 
@@ -196,13 +198,12 @@ namespace yolo_octo_wallhack {
 private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 
 	StringInterpreter stringInterpreter;
-	Output^ o = gcnew Output();
-	o->Show();
+
 	for (int i = 0; i < textBox1->Lines->Length; i++)
 	{
 		
 		stringInterpreter.pushLine(toStringFromManaged((String^)textBox1->Lines[i]));
-		o->pushLine((String^)textBox1->Lines[i]);
+	
 		
 
 	}

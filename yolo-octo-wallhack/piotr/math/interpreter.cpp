@@ -3,6 +3,7 @@
 #include "../../Output.h"
 #include <stack>
 #include <queue>
+#include <math.h>
 namespace Piotr
 {
 	namespace Math
@@ -16,13 +17,16 @@ namespace Piotr
 			mKeywords["Real"] = &StringInterpreter::allocateReal;
 			mKeywords["DisplayReal"] = &StringInterpreter::displayReal;
 			mKeywords["Set"] = &StringInterpreter::set;
+			mKeywords["Goto"] = &StringInterpreter::gotoLine;
+			mKeywords["Label"] = &StringInterpreter::makeLabel;
+			mKeywords["If"] = &StringInterpreter::ifStatement;
 
 			mOperators["+"] = &FunctionArgument::operator+;
 			mOperators["*"] = &FunctionArgument::operator*;
 			mOperators["-"] = &FunctionArgument::operator-;
 			mOperators["/"] = &FunctionArgument::operator/;
 			mOperators["^"] = &FunctionArgument::operator^;
-			//mOperators["="] = &FunctionArgument::operator=;
+			mOperators["="] = &FunctionArgument::operator=;
 		}
 
 		StringInterpreter::~StringInterpreter()
@@ -32,14 +36,46 @@ namespace Piotr
 
 		void StringInterpreter::run()
 		{
+			
 			mCurrentLine = 0;
+			mCode = prepareCode();
+			
 			while (mCurrentLine < mCode.size())
 			{
 				compileLine(mCode[mCurrentLine]);
 				mCurrentLine++;
 			}
 		}
-
+		std::vector<std::string> StringInterpreter::prepareCode()
+		{
+			std::vector<std::string> ncode;
+			for (int i = 0; i < mCode.size(); i++)
+			{
+				std::vector<std::string> t = seperateWords(mCode[i], ";", "");
+				for (int j = 0; j < t.size(); j++)
+				{
+					ncode.push_back(t[j]);
+				}
+			}
+			int ti = 0;
+			while (ti < ncode.size())
+			{
+				if (ncode[ti] == "Start")
+				{
+					mCurrentLine = ti+1;
+					break;
+				}
+				if (ncode[ti].find("Label") != std::string::npos)
+				{
+					int tti = mCurrentLine;
+					mCurrentLine = ti;
+					compileLine(ncode[ti]);
+					mCurrentLine = tti;
+				}
+				ti++;
+			}
+			return ncode;
+		}
 		//@TODO
 		void StringInterpreter::compileLine(const std::string& str)
 		{
@@ -118,7 +154,7 @@ namespace Piotr
 			}
 			return ret;
 		}
-
+		
 		std::vector<std::string> StringInterpreter::seperateWords(const std::string& str, const std::string& toremove, const std::string& tokeep)
 		{
 			std::vector<std::string> ret;
@@ -223,6 +259,82 @@ namespace Piotr
 
 			
 		}
+		
+		void StringInterpreter::makeLabel(const std::string& str)
+		{
+			static const std::string TAG = "Label: ";
+			std::vector<std::string> t = seperateWords(str," ", "");
+			if (t.size() != 2)
+			{
+				mLog.push_back(TAG + "Invalid size.");
+				return;
+			}
+
+			mLabels[t[1]] = mCurrentLine;
+		}
+
+		void StringInterpreter::gotoLine(const std::string& str)
+		{
+			static const std::string TAG = "Goto: ";
+			std::vector<std::string> t = seperateWords(str, " ", "");
+			if (t.size() != 2)
+			{
+				mLog.push_back(TAG + "Invalid size.");
+				return;
+			}
+
+			auto it = mLabels.find(t[1]);
+			if (it != mLabels.end())
+			{
+				mCurrentLine = it->second;
+			}
+			else
+			{
+				mLog.push_back(TAG + "No such label.");
+			}
+
+		}
+
+		void StringInterpreter::ifStatement(const std::string& str)
+		{
+			static const std::string TAG = "If: ";
+			std::vector<std::string> t = seperateWords(str, " ", "");
+			if (!checkSize(TAG, t, 4, -1)) return;
+			std::string tstr = "";
+			for (int i = 3; i < t.size(); i++)
+				tstr += t[i];
+			std::vector<std::string>& rpn = toRPN(tstr);
+			//Output^ output = gcnew Output(rpn);
+			//output->Show();
+			ManagedArgument ma = resolveRPN(rpn);
+			Real tr;
+			if (!(ma->getType() == tr.getType()))
+			{
+				mLog.push_back(TAG + "Invalid type");
+			}
+			Real* trp = (Real*)(ma.get());
+			if (trp->value<1e-5&&trp->value>-1e-5)
+			{
+				std::string tstr2;
+				trp->toString(tstr2);
+				//@TODO better goto
+				//mLog.push_back(TAG + "trpval " + tstr2);
+				mLog.push_back("false");
+				std::string tstr = "Goto " + t[2];
+				compileLine(tstr);
+			}
+			else
+			{
+				std::string tstr2;
+				trp->toString(tstr2);
+				//@TODO better goto
+				//mLog.push_back(TAG + "trpval " + tstr2);
+				mLog.push_back("true");
+				std::string tstr = "Goto " + t[1];
+				compileLine(tstr);
+			}
+		}
+		//Helper functions
 
 		bool StringInterpreter::isNumber(const std::string& str)
 		{
@@ -407,7 +519,15 @@ namespace Piotr
 
 			return false;
 		}
-
+		bool StringInterpreter::checkSize(const std::string& tag, const std::vector<std::string>& statement, unsigned minsize, unsigned maxsize)
+		{
+			if (statement.size() < minsize || statement.size() > maxsize)
+			{
+				mLog.push_back(tag + "Invalid size.");
+				return false;
+			}
+			return true;
+		}
 		ManagedArgument StringInterpreter::toArgument(const std::string& str)
 		{
 			auto it = mVariables.find(str);
@@ -542,7 +662,7 @@ namespace Piotr
 					b = stack.top();
 					stack.pop();
 					OperatorPointer op = toOperatorPointer(rpn[i]);
-					stack.push(((*b).*op)(a));
+					stack.push(((*a).*op)(b));
 					
 				}
 				else

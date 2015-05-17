@@ -127,7 +127,6 @@ namespace yolo_octo_wallhack {
 			this->textBox1->ReadOnly = true;
 			this->textBox1->Size = System::Drawing::Size(282, 226);
 			this->textBox1->TabIndex = 2;
-			this->textBox1->Text = L"a";
 			// 
 			// menuStrip1
 			// 

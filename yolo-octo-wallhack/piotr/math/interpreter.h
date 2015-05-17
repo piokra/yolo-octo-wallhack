@@ -35,13 +35,20 @@ namespace Piotr
 			bool isKeyword(const std::string& str);
 			std::string removeSpaces(const std::string& str);
 			std::string removeKeywords(const std::string& str);
+			std::vector<std::string> prepareCode();
 			std::vector<std::string> seperateWords(const std::string& str, const std::string& toremove, const std::string& tokeep);
 
 			
 			void allocateReal(const std::string& str);
 			void displayReal(const std::string& str);
 			void set(const std::string& str);
+			void gotoLine(const std::string& str);
+			void makeLabel(const std::string& str);
+			void ifStatement(const std::string& str);
 
+			////
+
+			bool checkSize(const std::string& tag, const std::vector<std::string>& statement, unsigned minsize, unsigned maxsize);
 			bool isNumber(const std::string& str);
 			bool isVariable(const std::string& str);
 			bool isOperator(const std::string& str);
@@ -57,11 +64,14 @@ namespace Piotr
 			std::vector<std::string> mCode;
 			int mCurrentLine;
 			
+			std::vector<int> mJumps;
+
 			//@TODO make static and constant?
 			std::unordered_map<std::string, CompilerFunction> mKeywords;
 			//@TODO make static and constant?
 			std::unordered_map<std::string, OperatorPointer> mOperators;
 			std::unordered_map<std::string, ManagedArgument> mVariables;
+			std::unordered_map<std::string, int> mLabels;
 			std::vector<std::string> mResult;
 			std::vector<std::string> mLog;
 		};

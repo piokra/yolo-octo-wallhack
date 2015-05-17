@@ -80,8 +80,9 @@ namespace Piotr
 			value = rr->value;
 			//This is invalid
 			//return ManagedArgument(this);
-			return ManagedArgument();
+			return ManagedArgument(new Real(value));
 		}
+		
 		void Real::toString(std::string& str)
 		{
 			str += tostr(value);
