@@ -45,6 +45,15 @@ namespace Piotr
 			const static Type type("MATH_FUNCTION");
 			return type;
 		}
+		int GenericMathFunction::getSize()
+		{
+			return mSize;
+		}
+
+		void GenericMathFunction::setSize(int size)
+		{
+			mSize = size;
+		}
 
 		ManagedArgument GenericMathFunction::tryCasting(ManagedArgument arg)
 		{

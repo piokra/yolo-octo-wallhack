@@ -4,6 +4,8 @@
 #include <stack>
 #include <queue>
 #include <math.h>
+#include "variable.h"
+#include "constant.h"
 namespace Piotr
 {
 	namespace Math
@@ -14,9 +16,11 @@ namespace Piotr
 		using namespace yolo_octo_wallhack;
 		StringInterpreter::StringInterpreter()
 		{
-			mKeywords["Real"] = &StringInterpreter::allocateReal;
-			mKeywords["DisplayReal"] = &StringInterpreter::displayReal;
+			mKeywords["Real"] = &StringInterpreter::allocateReal; 
+			mKeywords["MathFunction"] = &StringInterpreter::allocateFunction;
+			mKeywords["Display"] = &StringInterpreter::display;
 			mKeywords["Set"] = &StringInterpreter::set;
+			mKeywords["Sete"] = &StringInterpreter::sete;
 			mKeywords["Goto"] = &StringInterpreter::gotoLine;
 			mKeywords["Label"] = &StringInterpreter::makeLabel;
 			mKeywords["If"] = &StringInterpreter::ifStatement;
@@ -94,7 +98,6 @@ namespace Piotr
 			
 			CompilerFunction cf = mKeywords[words[0]];
 			(this->*cf)(str);
-			mLog.push_back("Compiled line properly.");
 		}
 		void StringInterpreter::pushLine(const std::string& str)
 		{
@@ -192,43 +195,51 @@ namespace Piotr
 		void StringInterpreter::allocateReal(const std::string& str)
 		{
 			static const std::string TAG = "allocateReal: ";
-			std::vector<std::string> t = seperateWords(str," ","");
-			if (t.size() != 2)
-			{
-				mLog.push_back(TAG + "Invalid size. Did not allocate real.");
-				return;
-			}
-
-			mLog.push_back(TAG + "Allocated real. Name: " + t[1]);
+			std::vector<std::string> t = seperateWords(str, " ", "");
+			if (!checkSize(TAG, t, 2, 2)) return;
 			mVariables[t[1]] = ManagedArgument(new Real);
 		}
 
-		void StringInterpreter::displayReal(const std::string& str)
+		void StringInterpreter::allocateFunction(const std::string& str)
 		{
-			static const std::string TAG = "displayReal: ";
+			static const std::string TAG = "allocateFunction: ";
+			std::vector<std::string> t = seperateWords(str, " (),", "");
+			if (!checkSize(TAG, t, 3, -1)) return;
+
+			mVariables[t[1]] = ManagedArgument(new Real);
+			
+			for (int i = 2; i < t.size(); i++)
+			{
+				mLocalVariables[t[1]][t[i]] = ManagedArgument(new Variable(t.size() - 2, i - 2));
+			}
+
+			
+		}
+
+		void StringInterpreter::display(const std::string& str)
+		{
+			static const std::string TAG = "display: ";
 			std::vector<std::string> t = seperateWords(str," ", "");
-			if (t.size() != 2)
+			if (!checkSize(TAG, t, 2, -1)) return;
+			std::string tstr = "";
+			for (int i = 1; i < t.size(); i++)
+				tstr += t[i];
+			std::vector<std::string> rpn = toRPN(tstr,mVariables,false);
+			ManagedArgument ma = resolveRPN(rpn,mVariables,false);
+			tstr = "";
+			if (ma == ManagedArgument())
 			{
-				mLog.push_back(TAG + "Invalid size. Did not display.");
+				mResult.push_back("Null reference");
 				return;
 			}
-			auto it = mVariables.find(t[1]);
-			if (it == mVariables.end())
-			{
-				mLog.push_back(TAG + "No such variable.");
-				return;
-			}
-			mLog.push_back(TAG + "Displayed real. Name: " + t[1]);
-			Real* real = (Real*)it->second.get();
-			std::string ts;
-			real->toString(ts);
-			mResult.push_back(ts);
+			ma->toString(tstr);
+			mResult.push_back(tstr);
 		}
 
 		void StringInterpreter::set(const std::string& str)
 		{
-			static const std::string TAG = "setReal: ";
-			std::vector<std::string> t = seperateWords(str," ", "");
+			static const std::string TAG = "sete: ";
+			std::vector<std::string> t = seperateWords(str, " ", "");
 			if (t.size() < 3)
 			{
 				mLog.push_back(TAG + "Invalid size. Did not set.");
@@ -240,20 +251,64 @@ namespace Piotr
 				mLog.push_back(TAG + "No such variable.");
 				return;
 			}
-			ManagedArgument left = toArgument(t[1]);
+			ManagedArgument left = toArgument(t[1], mVariables);
 			std::string rest = "";
 			for (int i = 2; i < t.size(); i++)
 				rest += t[i];
-			
-			
-			std::vector<std::string> rpn = toRPN(rest);
+			auto table = mLocalVariables.find(t[1]);
+			VariableTable& vt = mVariables;
+			if (table != mLocalVariables.end())
+			{
+				vt = table->second;
+			}
+
+			std::vector<std::string> rpn = toRPN(rest, vt, false);
 			/*
 			Output^ o = gcnew Output(rpn);
 			o->Show();
 			*/
-			ManagedArgument right = resolveRPN(rpn);
+			ManagedArgument right = resolveRPN(rpn, vt, false);
 
-			(*left).operator=(right);
+			//@TODO test
+			mVariables[t[1]] = right;
+		}
+
+
+		void StringInterpreter::sete(const std::string& str)
+			{
+				static const std::string TAG = "sete: ";
+				std::vector<std::string> t = seperateWords(str, " ", "");
+				if (t.size() < 3)
+				{
+					mLog.push_back(TAG + "Invalid size. Did not set.");
+					return;
+				}
+				auto it = mVariables.find(t[1]);
+				if (it == mVariables.end())
+				{
+					mLog.push_back(TAG + "No such variable.");
+					return;
+				}
+				ManagedArgument left = toArgument(t[1], mVariables);
+				std::string rest = "";
+				for (int i = 2; i < t.size(); i++)
+					rest += t[i];
+				auto table = mLocalVariables.find(t[1]);
+				VariableTable& vt = mVariables;
+				if (table != mLocalVariables.end())
+				{
+					vt = table->second;
+				}
+			
+			std::vector<std::string> rpn = toRPN(rest,vt, true);
+			/*
+			Output^ o = gcnew Output(rpn);
+			o->Show();
+			*/
+			ManagedArgument right = resolveRPN(rpn,vt,true);
+
+			//@TODO test
+			mVariables[t[1]] = right;
 
 
 
@@ -303,10 +358,10 @@ namespace Piotr
 			std::string tstr = "";
 			for (int i = 3; i < t.size(); i++)
 				tstr += t[i];
-			std::vector<std::string>& rpn = toRPN(tstr);
+			std::vector<std::string>& rpn = toRPN(tstr,mVariables,false);
 			//Output^ output = gcnew Output(rpn);
 			//output->Show();
-			ManagedArgument ma = resolveRPN(rpn);
+			ManagedArgument ma = resolveRPN(rpn,mVariables,false);
 			Real tr;
 			if (!(ma->getType() == tr.getType()))
 			{
@@ -343,10 +398,21 @@ namespace Piotr
 			return Double::TryParse(gcs, t);
 
 		}
-		bool StringInterpreter::isVariable(const std::string& str)
+		bool StringInterpreter::isVariable(const std::string& str,  const VariableTable& local)
 		{
-			auto it = mVariables.find(str);
-			return (it != mVariables.end());
+
+			bool res = false;
+			auto it = local.find(str);
+			res = res || (it != local.end());
+
+			it = mVariables.find(str);
+			res = res || (it != mVariables.end());
+			return res;
+		}
+		bool StringInterpreter::isMathFunction(const std::string& str)
+		{
+			auto it = mLocalVariables.find(str);
+			return (it != mLocalVariables.end());
 		}
 		bool StringInterpreter::isOperator(const std::string& str)
 		{
@@ -528,12 +594,17 @@ namespace Piotr
 			}
 			return true;
 		}
-		ManagedArgument StringInterpreter::toArgument(const std::string& str)
+		ManagedArgument StringInterpreter::toArgument(const std::string& str, const VariableTable& local)
 		{
-			auto it = mVariables.find(str);
-			if (it != mVariables.end())
+			auto it = local.find(str);
+			if (it != local.end())
 			{
 				return it->second;
+			}
+			auto it2 = mVariables.find(str);
+			if (!(it2 == mVariables.end()))
+			{
+				return it2->second;
 			}
 			//try casting to a Real
 			if (isNumber(str))
@@ -543,13 +614,13 @@ namespace Piotr
 				ManagedArgument p = ManagedArgument(new Real(val));
 				return p;
 			}
-			mLog.push_back("Failed to convert.");
-			exit(1);
+			mLog.push_back(str+": Failed to convert.");
+
 			return ManagedArgument();
 
 
 		}
-		std::vector<std::string> StringInterpreter::toRPN(const std::string& str)
+		std::vector<std::string> StringInterpreter::toRPN(const std::string& str, const VariableTable& local, bool efunc)
 		{
 			//@TODO check for errors
 			std::vector<std::string> e;
@@ -559,7 +630,12 @@ namespace Piotr
 			
 			for (int i = 0; i < t.size(); i++)
 			{
-				if (isNumber(t[i])||isVariable(t[i]))
+				if (isMathFunction(t[i])&&efunc)
+				{
+					stack.push(t[i]);
+				}
+				else
+				if (isNumber(t[i])||isVariable(t[i],local))
 				{
 					exitqueue.push_back(t[i]);
 				}
@@ -647,14 +723,37 @@ namespace Piotr
 		{
 			return mOperators[str];
 		}
-		ManagedArgument StringInterpreter::resolveRPN(const std::vector<std::string>& rpn)
+		ManagedArgument StringInterpreter::resolveRPN(const std::vector<std::string>& rpn, const VariableTable& local, bool efunc)
 		{
-			//@TODO functions
-			
+
 			ManagedArgument a, b;
 			std::stack<ManagedArgument> stack;
 			for (int i = 0; i < rpn.size(); i++)
 			{
+				
+				if (isMathFunction(rpn[i])&&efunc)
+				{
+					ManagedArgument f = toArgument(rpn[i], mVariables);
+					if (f == ManagedArgument())
+					{
+						mLog.push_back("Failed to resolve RPN.");
+						return ManagedArgument();
+					}
+					int fsize = f->getSize();
+					ArgumentCollection* ac = new ArgumentCollection(fsize);
+					for (int i = 0; i < fsize; i++)
+					{
+						ManagedArgument ta = stack.top();
+						stack.pop();
+						ac->set(i, ta);
+					}
+					ManagedArgument mac = ManagedArgument(ac);
+					GenericMathFunction* gmc = (GenericMathFunction*)f.get();
+					stack.push(gmc->operator()(mac));
+
+				}
+				
+				else
 				if (isOperator(rpn[i]))
 				{
 					a = stack.top();
@@ -667,7 +766,8 @@ namespace Piotr
 				}
 				else
 				{
-					stack.push(toArgument(rpn[i]));
+					//mLog.push_back(rpn[i]);
+					stack.push(toArgument(rpn[i],local));
 				}
 
 				

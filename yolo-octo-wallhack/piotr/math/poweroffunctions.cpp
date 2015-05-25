@@ -4,9 +4,9 @@ namespace Piotr
 {
 	namespace Math
 	{
-		PowerOfFunctions::PowerOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(left), mRight(right)
+		PowerOfFunctions::PowerOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(right), mRight(left)
 		{
-
+			setSize(std::max({ mLeft->getSize(), mRight->getSize() }));
 		}
 
 		ManagedArgument PowerOfFunctions::operator()(ManagedArgument arg)
@@ -30,6 +30,7 @@ namespace Piotr
 			mRight->toString(tstr2);
 			tstr += tstr2;
 			tstr += ")";
+			str += tstr;
 		}
 		ManagedArgument PowerOfFunctions::clone()
 		{

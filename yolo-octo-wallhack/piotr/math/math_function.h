@@ -6,7 +6,8 @@
 #include "argument.h"
 #include "argument_collection.h"
 #include <vector>
-
+#include <algorithm>
+#include <math.h>
 namespace Piotr
 {
 	namespace Math
@@ -29,6 +30,12 @@ namespace Piotr
 			virtual ManagedArgument operator=(ManagedArgument r);
 
 			virtual const Type& getType();
+		
+			virtual int getSize();
+			virtual void setSize(int size);
+		protected:
+		private:
+			int mSize;
 		};
 	}
 }

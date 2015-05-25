@@ -26,6 +26,12 @@ namespace Piotr
 		}
 		ManagedArgument Real::operator+(ManagedArgument r)
 		{
+			const static Type func("MATH_FUNCTION");
+			
+			if (r->getType() == func)
+			{
+				return r->operator+(this->clone());
+			}
 			if (!(r->getType() == getType()))
 				return ManagedArgument();
 			Real* rr = (Real*)r.get();
@@ -35,6 +41,11 @@ namespace Piotr
 		}
 		ManagedArgument Real::operator*(ManagedArgument r)
 		{
+			const static Type func("MATH_FUNCTION");
+			if (r->getType() == func)
+			{
+				return r->operator*(this->clone());
+			}
 			if (!(r->getType() == getType()))
 				return ManagedArgument();
 			Real* rr = (Real*)r.get();
@@ -63,12 +74,18 @@ namespace Piotr
 		}
 		ManagedArgument Real::operator^(ManagedArgument r)
 		{
+			const static Type func("MATH_FUNCTION");
+			
+			if (r->getType() == func)
+			{
+				return r->operator^(this->clone());
+			}
 			if (!(r->getType() == getType()))
 				return ManagedArgument();
 			Real* rr = (Real*)r.get();
 
 			Real* tr = new Real;
-			tr->value = pow(value, rr->value);
+			tr->value = pow(rr->value,value);
 			return ManagedArgument(tr);
 		}
 		ManagedArgument Real::operator=(ManagedArgument r)

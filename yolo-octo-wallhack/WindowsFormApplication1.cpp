@@ -15,6 +15,7 @@ namespace Piotr
 {
 	namespace Math
 	{
+		/*
 		void SITestFunction()
 		{
 			StringInterpreter si;
@@ -33,7 +34,7 @@ namespace Piotr
 			op = gcnew Output(si.toRPN("((a+t)*((b+(a+c))^(c+d)))"));
 			op->Show();
 
-		}
+		}*/
 		void SITestFunction2()
 		{
 			/*
@@ -105,7 +106,7 @@ int main(array<System::String ^> ^args)
 	// Enabling Windows XP visual effects before any controls are created
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false); 
-	FunctionTestFunction();
+	//FunctionTestFunction();
 	//SITestFunction();
 	// Create the main window and run it
 	//SITestFunction();

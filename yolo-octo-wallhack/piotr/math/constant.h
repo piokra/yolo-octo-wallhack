@@ -15,6 +15,7 @@ namespace Piotr
 		public:
 			Constant(int size) : mSize(size)
 			{
+				setSize(size);
 				ArgumentCollection* ac = new ArgumentCollection(size);
 				mOutput = ManagedArgument(ac);
 			}

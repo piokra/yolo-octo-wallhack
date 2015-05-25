@@ -13,7 +13,7 @@ namespace Piotr
 		public:
 			Variable(int size, int pos) : mPos(pos), mSize(size)
 			{
-				
+				setSize(size);
 			};
 
 			virtual ManagedArgument operator()(ManagedArgument arg)

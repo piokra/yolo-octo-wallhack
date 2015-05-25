@@ -1,12 +1,12 @@
 #include "sumoffunctions.h"
-
+#include <algorithm>
 namespace Piotr
 {
 	namespace Math
 	{
-		SumOfFunctions::SumOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(left), mRight(right)
+		SumOfFunctions::SumOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(right), mRight(left)
 		{
-
+			setSize(std::max({ mLeft->getSize(), mRight->getSize() }));
 		}
 
 		ManagedArgument SumOfFunctions::operator()(ManagedArgument arg)
@@ -30,6 +30,7 @@ namespace Piotr
 			mRight->toString(tstr2);
 			tstr += tstr2;
 			tstr += ")";
+			str += tstr;
 		}
 		ManagedArgument SumOfFunctions::clone()
 		{

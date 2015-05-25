@@ -4,9 +4,9 @@ namespace Piotr
 {
 	namespace Math
 	{
-		MultiplicationOfFunctions::MultiplicationOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(left), mRight(right)
+		MultiplicationOfFunctions::MultiplicationOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(right), mRight(left)
 		{
-
+			setSize(std::max({ mLeft->getSize(), mRight->getSize() }));
 		}
 
 		ManagedArgument MultiplicationOfFunctions::operator()(ManagedArgument arg)
@@ -26,10 +26,11 @@ namespace Piotr
 			mLeft->toString(tstr2);
 			tstr += tstr2;
 			tstr2 = "";
-			tstr += "^";
+			tstr += "*";
 			mRight->toString(tstr2);
 			tstr += tstr2;
 			tstr += ")";
+			str += tstr;
 		}
 		ManagedArgument MultiplicationOfFunctions::clone()
 		{
