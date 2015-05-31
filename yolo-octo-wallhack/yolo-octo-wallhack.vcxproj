@@ -85,6 +85,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="example\loop.ppp" />
+    <None Include="example\netwon.ppp" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +111,7 @@
     <ClCompile Include="WindowsFormApplication1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\conversion.h" />
+    <ClInclude Include="conversion.h" />
     <ClInclude Include="Input.h">
       <FileType>CppForm</FileType>
     </ClInclude>

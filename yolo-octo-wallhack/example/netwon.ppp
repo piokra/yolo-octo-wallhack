@@ -1,0 +1,53 @@
+Alias r Real
+Alias s Set
+Alias d Display
+Alias dd Derivative
+Alias mf MathFunction
+Alias g2 Graph2D
+Alias se Sete
+
+mf cos(x)
+s cos 1-x*x/2+x*x*x*x/24-x*x*x*x*x*x/720+x*x*x*x*x*x*x*x/(720*7*8)
+mf f(x)
+s f x-cos
+mf df(x)
+s df f
+dd df x
+
+g2 df 0 1 0.01
+g2 f 0 1 0.01
+r left
+r right
+r xp
+r xn
+r it
+s left 0
+s right 1
+s it 10
+s xn (left+right)/2
+Label loop
+If true false it
+Label true
+s xp xn
+se xn xp-f(xp)/df(xp)
+s it it-1
+Goto loop
+Label false
+Display xn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

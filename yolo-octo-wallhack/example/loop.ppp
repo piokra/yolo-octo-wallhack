@@ -1,0 +1,14 @@
+Alias r Real
+Alias s Set
+Alias d Display
+r a
+s a 10
+Label loop
+If true false a
+Label true
+s a a-1
+d a
+Goto loop
+Display a
+Label false
+

@@ -25,9 +25,18 @@
     <Filter Include="Piotr\Template">
       <UniqueIdentifier>{d5e1e4ae-89ea-4b1b-a5ee-980fcf0189da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Piotr\Examples">
+      <UniqueIdentifier>{db5e0a7a-68e6-42b4-bee4-0d8e38306dcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="example\loop.ppp">
+      <Filter>Piotr\Examples</Filter>
+    </None>
+    <None Include="example\netwon.ppp">
+      <Filter>Piotr\Examples</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowsFormApplication1.cpp">
@@ -122,9 +131,6 @@
     <ClInclude Include="piotr\math\interpreter.h">
       <Filter>Piotr\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\conversion.h">
-      <Filter>Piotr\Utill</Filter>
-    </ClInclude>
     <ClInclude Include="piotr\math\sumoffunctions.h">
       <Filter>Piotr\Math</Filter>
     </ClInclude>
@@ -142,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="piotr\math\divisionoffunctions.h">
       <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="conversion.h">
+      <Filter>Piotr\Utill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
