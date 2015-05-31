@@ -75,6 +75,9 @@
     <ClCompile Include="piotr\math\math_function.cpp">
       <Filter>Piotr\Math</Filter>
     </ClCompile>
+    <ClCompile Include="MyForm.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="piotr\math\poweroffunctions.h">
       <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

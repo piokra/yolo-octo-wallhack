@@ -6,6 +6,7 @@
 #include <math.h>
 #include "variable.h"
 #include "constant.h"
+#include "../../Graph.h"
 namespace Piotr
 {
 	namespace Math
@@ -24,6 +25,7 @@ namespace Piotr
 			mKeywords["Goto"] = &StringInterpreter::gotoLine;
 			mKeywords["Label"] = &StringInterpreter::makeLabel;
 			mKeywords["If"] = &StringInterpreter::ifStatement;
+			mKeywords["Graph2D"] = &StringInterpreter::drawGraph2D;
 
 			mOperators["+"] = &FunctionArgument::operator+;
 			mOperators["*"] = &FunctionArgument::operator*;
@@ -388,6 +390,41 @@ namespace Piotr
 				std::string tstr = "Goto " + t[1];
 				compileLine(tstr);
 			}
+		}
+
+		void StringInterpreter::drawGraph2D(const std::string& str)
+		{
+			//@ rpn?
+			static const std::string TAG = "drawGraph2D: ";
+			std::vector<std::string> args = seperateWords(str, " ", "");
+			if (!checkSize(TAG, args, 5, 5)) return;
+			
+			String^ lefts = gcnew String(args[2].c_str());
+			String^ rights = gcnew String(args[3].c_str());
+			String^ steps = gcnew String(args[4].c_str());
+
+			double left;
+			double right;
+			double step; 
+
+			bool leftr = System::Double::TryParse(lefts, left);
+			bool rightr = System::Double::TryParse(rights, right);
+			bool stepr = System::Double::TryParse(steps, step);
+
+			if (!(leftr&&rightr&&stepr))
+			{
+				mLog.push_back(TAG + "Failed to cast doubles");
+				return;
+			}
+			if (!isMathFunction(args[1]))
+			{
+				mLog.push_back(TAG + "Invalid funciton?");
+				return;
+			}
+
+			Graph^ graph = gcnew Graph(toArgument(args[1], mVariables), left, right, step);
+			graph->Show();
+			
 		}
 		//Helper functions
 

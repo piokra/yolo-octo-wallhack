@@ -48,6 +48,7 @@ namespace Piotr
 			void makeLabel(const std::string& str);
 			void ifStatement(const std::string& str);
 			void allocateFunction(const std::string& str);
+			void drawGraph2D(const std::string& str);
 
 			////
 

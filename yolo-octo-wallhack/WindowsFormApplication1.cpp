@@ -2,6 +2,7 @@
 
 #include "Input.h"
 #include "Output.h"
+#include "Graph.h"
 #include "piotr\utill\type.h"
 #include "piotr\math\interpreter.h"
 #include "piotr\math\math_function.h"
@@ -102,6 +103,7 @@ namespace Piotr
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)
 {
+	
 	StringInterpreter si;
 	// Enabling Windows XP visual effects before any controls are created
 	Application::EnableVisualStyles();
@@ -110,6 +112,10 @@ int main(array<System::String ^> ^args)
 	//SITestFunction();
 	// Create the main window and run it
 	//SITestFunction();
+	ManagedArgument ma = ManagedArgument(new Variable(1, 0));
+	Graph^ graph = gcnew Graph(ma, 0, 1, 0.1);
+	graph->Show();
 	Application::Run(gcnew Input());
+
 	return 0;
 }
