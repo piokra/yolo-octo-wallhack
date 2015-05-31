@@ -92,10 +92,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="piotr\math\argument.cpp" />
     <ClCompile Include="piotr\math\argument_collection.cpp" />
+    <ClCompile Include="piotr\math\differenecoffunctions.cpp" />
+    <ClCompile Include="piotr\math\divisonoffunctions.cpp" />
     <ClCompile Include="piotr\math\interpreter.cpp" />
     <ClCompile Include="piotr\math\math_function.cpp" />
     <ClCompile Include="piotr\math\multiplictionoffunctions.cpp" />
@@ -121,6 +122,8 @@
     <ClInclude Include="piotr\math\argument.h" />
     <ClInclude Include="piotr\math\argument_collection.h" />
     <ClInclude Include="piotr\math\constant.h" />
+    <ClInclude Include="piotr\math\differenceoffunctions.h" />
+    <ClInclude Include="piotr\math\divisionoffunctions.h" />
     <ClInclude Include="piotr\math\interpreter.h" />
     <ClInclude Include="piotr\math\math_function.h" />
     <ClInclude Include="piotr\math\multiplictionoffunctions.h" />

@@ -4,7 +4,7 @@ namespace Piotr
 {
 	namespace Math
 	{
-		PowerOfFunctions::PowerOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(right), mRight(left)
+		PowerOfFunctions::PowerOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(left), mRight(right)
 		{
 			setSize(std::max({ mLeft->getSize(), mRight->getSize() }));
 		}
@@ -35,6 +35,10 @@ namespace Piotr
 		ManagedArgument PowerOfFunctions::clone()
 		{
 			return ManagedArgument(new PowerOfFunctions(mLeft->clone(), mRight->clone()));
+		}
+		ManagedArgument PowerOfFunctions::derivative(ManagedArgument x)
+		{
+			throw gcnew NotImplementedException();
 		}
 	}
 }

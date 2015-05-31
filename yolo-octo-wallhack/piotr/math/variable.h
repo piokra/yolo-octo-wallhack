@@ -3,6 +3,8 @@
 
 #include "math_function.h"
 #include "../../conversion.h"
+#include "constant.h"
+#include "real.h"
 namespace Piotr
 {
 	namespace Math
@@ -21,21 +23,7 @@ namespace Piotr
 				return arg->operator[](mPos);
 				
 			}
-			/*virtual	ManagedArgument getInputFormat()
-			{
-				//ArgumentCollection ac;
-				//return ac;
-			}*/
-			/*
-			virtual ManagedArgument getOutputFormat()
-			{
-				return mOutput;
-			}
-		private:
-			ManagedArgument mOutput;*/
-		private:
-			int mPos;
-			int mSize;
+
 			virtual ManagedArgument clone()
 			{
 				return ManagedArgument(new Variable(mSize, mPos));
@@ -45,6 +33,27 @@ namespace Piotr
 				str += "x";
 				str += tostr(mPos);
 			}
+			virtual ManagedArgument derivative(ManagedArgument x)
+			{
+				Variable* t = (Variable*)x.get();
+				if (t->getPos() != mPos)
+				{
+					Constant* c = new Constant(1);
+					c->set(ManagedArgument(new Real));
+					return ManagedArgument(c);
+				}
+				Constant* c = new Constant(1);
+				c->set(ManagedArgument(new Real(1)));
+				return ManagedArgument(c);
+			}
+			virtual int getPos()
+			{
+				return mPos;
+			}
+		private:
+			int mPos;
+			int mSize;
+
 		};
 	}
 }

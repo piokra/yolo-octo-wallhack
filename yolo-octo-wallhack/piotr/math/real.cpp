@@ -1,6 +1,7 @@
 #include "real.h"
 #include <math.h>
 #include "../../conversion.h"
+#include "poweroffunctions.h"
 namespace Piotr
 {
 	namespace Math
@@ -55,21 +56,36 @@ namespace Piotr
 		}
 		ManagedArgument Real::operator-(ManagedArgument r)
 		{
+			const static Type func("MATH_FUNCTION");
+			if (r->getType() == func)
+			{
+							
+				ManagedArgument t = r->operator-(clone());
+				t = t->operator*(ManagedArgument(new Real(-1)));
+				return t;
+			}
 			if (!(r->getType() == getType()))
 				return ManagedArgument();
 			Real* rr = (Real*)r.get();
 			Real* tr = new Real;
-			tr->value = rr->value - value;
+			tr->value = value - rr->value;
 			return ManagedArgument(tr);
 		}
 		ManagedArgument Real::operator/(ManagedArgument r)
 		{
+			const static Type func("MATH_FUNCTION");
+			if (r->getType() == func)
+			{
+				ManagedArgument t = r->operator/(clone());
+				t = t->operator^(ManagedArgument(new Real(-1)));
+				return t;
+			}
 			if (!(r->getType() == getType()))
 				return ManagedArgument();
 			Real* rr = (Real*)r.get();
 
 			Real* tr = new Real;
-			tr->value = rr->value / value;
+			tr->value = value / rr->value;
 			return ManagedArgument(tr);
 		}
 		ManagedArgument Real::operator^(ManagedArgument r)
@@ -78,14 +94,14 @@ namespace Piotr
 			
 			if (r->getType() == func)
 			{
-				return r->operator^(this->clone());
+				return ManagedArgument(new PowerOfFunctions(GenericMathFunction::tryCasting(clone()), r));
 			}
 			if (!(r->getType() == getType()))
 				return ManagedArgument();
 			Real* rr = (Real*)r.get();
 
 			Real* tr = new Real;
-			tr->value = pow(rr->value,value);
+			tr->value = pow(value,rr->value);
 			return ManagedArgument(tr);
 		}
 		ManagedArgument Real::operator=(ManagedArgument r)

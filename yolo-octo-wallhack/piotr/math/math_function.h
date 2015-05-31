@@ -20,7 +20,7 @@ namespace Piotr
 			//virtual ArgumentCollection getInputFormat() = 0;
 			//virtual ArgumentCollection getOutputFormat() = 0;
 
-			ManagedArgument tryCasting(ManagedArgument arg);
+			static ManagedArgument tryCasting(ManagedArgument arg);
 
 			virtual ManagedArgument operator+(ManagedArgument r);
 			virtual ManagedArgument operator*(ManagedArgument r);
@@ -28,6 +28,9 @@ namespace Piotr
 			virtual ManagedArgument operator/(ManagedArgument r);
 			virtual ManagedArgument operator^(ManagedArgument r);
 			virtual ManagedArgument operator=(ManagedArgument r);
+
+			virtual ManagedArgument derivative(ManagedArgument var);
+			virtual ManagedArgument taylorSeries1D(ManagedArgument x, ManagedArgument itemcount);
 
 			virtual const Type& getType();
 		

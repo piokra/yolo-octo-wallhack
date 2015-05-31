@@ -26,6 +26,9 @@ namespace Piotr
 			mKeywords["Label"] = &StringInterpreter::makeLabel;
 			mKeywords["If"] = &StringInterpreter::ifStatement;
 			mKeywords["Graph2D"] = &StringInterpreter::drawGraph2D;
+			mKeywords["Alias"] = &StringInterpreter::makeAlias;
+			mKeywords["Derivative"] = &StringInterpreter::countDerivative;
+			//mKeywords["TaylorSeries"] = &StringInterpreter::expandTaylor;
 
 			mOperators["+"] = &FunctionArgument::operator+;
 			mOperators["*"] = &FunctionArgument::operator*;
@@ -208,13 +211,16 @@ namespace Piotr
 			std::vector<std::string> t = seperateWords(str, " (),", "");
 			if (!checkSize(TAG, t, 3, -1)) return;
 
-			mVariables[t[1]] = ManagedArgument(new Real);
+			mLocalVariables[t[1]] = std::unordered_map < std::string, ManagedArgument >();
 			
 			for (int i = 2; i < t.size(); i++)
 			{
 				mLocalVariables[t[1]][t[i]] = ManagedArgument(new Variable(t.size() - 2, i - 2));
 			}
 
+			Constant* c = new Constant(t.size()-2);
+			c->set(ManagedArgument(new Real));
+			mVariables[t[1]] = ManagedArgument(c);
 			
 		}
 
@@ -240,7 +246,7 @@ namespace Piotr
 
 		void StringInterpreter::set(const std::string& str)
 		{
-			static const std::string TAG = "sete: ";
+			static const std::string TAG = "set: ";
 			std::vector<std::string> t = seperateWords(str, " ", "");
 			if (t.size() < 3)
 			{
@@ -253,23 +259,33 @@ namespace Piotr
 				mLog.push_back(TAG + "No such variable.");
 				return;
 			}
-			ManagedArgument left = toArgument(t[1], mVariables);
+			ManagedArgument right;
+			std::vector<std::string> rpn;
 			std::string rest = "";
 			for (int i = 2; i < t.size(); i++)
 				rest += t[i];
+			
 			auto table = mLocalVariables.find(t[1]);
-			VariableTable& vt = mVariables;
+
 			if (table != mLocalVariables.end())
 			{
-				vt = table->second;
+				
+				rpn = toRPN(rest, mLocalVariables[t[1]] , false);
+				right = resolveRPN(rpn, mLocalVariables[t[1]], false);
 			}
-
-			std::vector<std::string> rpn = toRPN(rest, vt, false);
+			else
+			{
+				rpn = toRPN(rest, mVariables, false);
+				right = resolveRPN(rpn, mVariables, false);
+			}
+			
+		
+			
 			/*
 			Output^ o = gcnew Output(rpn);
 			o->Show();
 			*/
-			ManagedArgument right = resolveRPN(rpn, vt, false);
+			
 
 			//@TODO test
 			mVariables[t[1]] = right;
@@ -310,7 +326,7 @@ namespace Piotr
 			ManagedArgument right = resolveRPN(rpn,vt,true);
 
 			//@TODO test
-			mVariables[t[1]] = right;
+			mVariables[t[1]] = right->clone();
 
 
 
@@ -370,13 +386,13 @@ namespace Piotr
 				mLog.push_back(TAG + "Invalid type");
 			}
 			Real* trp = (Real*)(ma.get());
-			if (trp->value<1e-5&&trp->value>-1e-5)
+			if (trp->value<1e-12&&trp->value>-1e-12)
 			{
 				std::string tstr2;
 				trp->toString(tstr2);
 				//@TODO better goto
 				//mLog.push_back(TAG + "trpval " + tstr2);
-				mLog.push_back("false");
+				//mLog.push_back("false");
 				std::string tstr = "Goto " + t[2];
 				compileLine(tstr);
 			}
@@ -386,7 +402,7 @@ namespace Piotr
 				trp->toString(tstr2);
 				//@TODO better goto
 				//mLog.push_back(TAG + "trpval " + tstr2);
-				mLog.push_back("true");
+				//mLog.push_back("true");
 				std::string tstr = "Goto " + t[1];
 				compileLine(tstr);
 			}
@@ -426,6 +442,49 @@ namespace Piotr
 			graph->Show();
 			
 		}
+
+		void StringInterpreter::makeAlias(const std::string& str)
+		{
+			const static std::string TAG = "makeAlias: ";
+			std::vector<std::string> t = seperateWords(str, " ", "");
+			if (!checkSize(TAG, t, 3, 3)) return;
+			if (t[1] != t[2])
+			{
+				auto it = mKeywords.find(t[1]);
+				if (it == mKeywords.end())
+				{
+					mKeywords[t[1]] = mKeywords[t[2]];
+				}
+			}
+		}
+
+		void StringInterpreter::countDerivative(const std::string& str)
+		{
+			const static std::string TAG = "countDerivative: ";
+			std::vector<std::string> t = seperateWords(str, " ", "");
+			if (!checkSize(TAG, t, 3, 3)) return;
+
+			ManagedArgument f = toArgument(t[1],mVariables);
+			if (!isMathFunction(t[1]))
+			{
+				mLog.push_back(TAG + "Not a function.");
+				return;
+			}
+			
+			VariableTable& vt = mLocalVariables[t[1]];
+			auto it = vt.find(t[2]);
+			if (it == vt.end())
+			{
+				mLog.push_back(TAG + "Failed to find variable " + t[2]);
+				return;
+			}
+
+			ManagedArgument v = it->second;
+			GenericMathFunction* gmc = (GenericMathFunction*)f.get();
+			ManagedArgument tt = gmc->derivative(v);
+			mVariables[t[1]] = tt;
+		}
+
 		//Helper functions
 
 		bool StringInterpreter::isNumber(const std::string& str)
@@ -636,11 +695,13 @@ namespace Piotr
 			auto it = local.find(str);
 			if (it != local.end())
 			{
+
 				return it->second;
 			}
 			auto it2 = mVariables.find(str);
 			if (!(it2 == mVariables.end()))
 			{
+
 				return it2->second;
 			}
 			//try casting to a Real
@@ -798,7 +859,7 @@ namespace Piotr
 					b = stack.top();
 					stack.pop();
 					OperatorPointer op = toOperatorPointer(rpn[i]);
-					stack.push(((*a).*op)(b));
+					stack.push(((*b).*op)(a));
 					
 				}
 				else
@@ -807,6 +868,11 @@ namespace Piotr
 					stack.push(toArgument(rpn[i],local));
 				}
 
+				
+			}
+			if (stack.top() == ManagedArgument())
+			{
+				mLog.push_back("ResolveRPN: something went wrong. ");
 				
 			}
 			return stack.top();

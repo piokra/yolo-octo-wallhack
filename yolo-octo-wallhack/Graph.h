@@ -53,22 +53,28 @@ namespace yolo_octo_wallhack {
 			
 			double windowX = Size.Width;
 			double windowY = Size.Height;
-			double xScale = windowX/ (mRight - mLeft);
-			double yScale = windowY / (System::Math::Abs(mUp - mDown));
+			double xScale = windowX*0.88 / (mRight - mLeft);
+			double yScale = windowY*0.88 / (System::Math::Abs(mUp - mDown));
 			Graphics^ gc = CreateGraphics();
 			gc->Clear(System::Drawing::Color::AliceBlue);
-			Drawing::Pen^ pen = gcnew Pen(System::Drawing::Color::HotPink, 10);
+			Drawing::Pen^ pen = gcnew Pen(System::Drawing::Color::HotPink, 5);
 			array<Point>^ points = gcnew array<Point>(mValues->Length);
 			double x = 0;
 
 			for (int i = 0; i < mValues->Length; i++)
 			{
-				double y = ((mValues[i] - mDown)*yScale);
-				points[i] = Point((x)*xScale, y);
+				double y = ((mValues[i] - mDown)*yScale+windowY*0.05);
+				points[i] = Point((x)*xScale+windowX*0.1, y);
 				x += mStep;
 			}
-			gc->DrawCurve(pen, points);
 			
+			gc->DrawCurve(pen, points);
+			return;
+			pen = gcnew Pen(System::Drawing::Color::DarkGoldenrod,10);
+			for (int i = 0; i < mValues->Length; i++)
+			{
+				gc->DrawRectangle(pen, points[i].X - 5, points[i].Y - 5, 10,10);
+			}
 			
 			
 		}

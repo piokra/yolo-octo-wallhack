@@ -2,8 +2,11 @@
 #include "sumoffunctions.h"
 #include "poweroffunctions.h"
 #include "multiplictionoffunctions.h"
+#include "differenceoffunctions.h"
+#include "divisionoffunctions.h"
 #include "constant.h"
 #include "real.h"
+#include "variable.h"
 #include <exception>
 namespace Piotr
 {
@@ -21,13 +24,13 @@ namespace Piotr
 		}
 		ManagedArgument GenericMathFunction::operator-(ManagedArgument r)
 		{
-			throw gcnew NotImplementedException();
-			return ManagedArgument();
+			GenericMathFunction* t = new DifferenceOfFunctions(clone(), tryCasting(r));
+			return ManagedArgument(t);
 		}
 		ManagedArgument GenericMathFunction::operator/(ManagedArgument r)
 		{
-			throw gcnew NotImplementedException();
-			return ManagedArgument();
+			GenericMathFunction* t = new DivisionOfFunctions(clone(), tryCasting(r));
+			return ManagedArgument(t);
 		}
 		ManagedArgument GenericMathFunction::operator^(ManagedArgument r)
 		{
@@ -54,7 +57,37 @@ namespace Piotr
 		{
 			mSize = size;
 		}
+		ManagedArgument GenericMathFunction::derivative(ManagedArgument)
+		{
+#ifdef _DEBUG
+			throw gcnew NotImplementedException();
+#endif
+			return ManagedArgument();
+		}
 
+		ManagedArgument GenericMathFunction::taylorSeries1D(ManagedArgument x, ManagedArgument items)
+		{
+			Real* itemc = (Real*)items.get();
+			int i = itemc->value ;
+			double factorial = 1;
+			ManagedArgument t = this->operator()(x);
+			ManagedArgument v = ManagedArgument(new Variable(1, 0));
+			ManagedArgument tt = derivative(v);
+			ManagedArgument ttt;
+			ManagedArgument tttt;
+			for (int j = 0; j < i; j++)
+			{
+				tttt = ManagedArgument(new PowerOfFunctions(ManagedArgument(new DifferenceOfFunctions(v, x)), ManagedArgument(new Real(i + 1))));
+				ttt = (*tt).operator/(ManagedArgument(new Real(factorial)));
+				ttt = (*ttt).operator*(tttt);
+				t = (*t).operator+(ttt);
+				factorial *= (i + 2.);
+				GenericMathFunction* gmc = (GenericMathFunction*)tt.get();
+				tt = gmc->derivative(v);
+			}
+			return t;
+
+		}
 		ManagedArgument GenericMathFunction::tryCasting(ManagedArgument arg)
 		{
 			const static Type real("MATH_REAL");

@@ -3,7 +3,7 @@
 
 
 #include "math_function.h"
-
+#include "real.h"
 namespace Piotr
 {
 	namespace Math
@@ -51,6 +51,12 @@ namespace Piotr
 			virtual void toString(std::string& str)
 			{
 				mOutput->toString(str);
+			}
+			virtual ManagedArgument derivative(ManagedArgument x)
+			{
+				Constant* c = new Constant(1);
+				c->set(ManagedArgument(new Real));
+				return ManagedArgument(c);
 			}
 		private:
 			int mSize;

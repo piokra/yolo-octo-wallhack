@@ -1,10 +1,10 @@
 #include "multiplictionoffunctions.h"
-
+#include "sumoffunctions.h"
 namespace Piotr
 {
 	namespace Math
 	{
-		MultiplicationOfFunctions::MultiplicationOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(right), mRight(left)
+		MultiplicationOfFunctions::MultiplicationOfFunctions(ManagedFunction left, ManagedFunction right) : mLeft(left), mRight(right)
 		{
 			setSize(std::max({ mLeft->getSize(), mRight->getSize() }));
 		}
@@ -35,6 +35,12 @@ namespace Piotr
 		ManagedArgument MultiplicationOfFunctions::clone()
 		{
 			return ManagedArgument(new MultiplicationOfFunctions(mLeft->clone(), mRight->clone()));
+		}
+		ManagedArgument MultiplicationOfFunctions::derivative(ManagedArgument x)
+		{
+			GenericMathFunction* left = (GenericMathFunction*)mLeft.get();
+			GenericMathFunction* right = (GenericMathFunction*)mRight.get();
+			return ManagedArgument(new SumOfFunctions(ManagedArgument(new MultiplicationOfFunctions(left->derivative(x),mRight)), ManagedArgument(new MultiplicationOfFunctions(right->derivative(x),mLeft))));
 		}
 	}
 }

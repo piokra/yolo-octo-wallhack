@@ -6,17 +6,17 @@ namespace Piotr
 {
 	namespace Math
 	{
-		using ManagedFunction = std::shared_ptr < FunctionArgument > ;
-		class MultiplicationOfFunctions : public GenericMathFunction
+		using ManagedFunction = std::shared_ptr < FunctionArgument >;
+		class DivisionOfFunctions : public GenericMathFunction
 		{
 		public:
 
-			MultiplicationOfFunctions(ManagedFunction left, ManagedFunction right);
+			DivisionOfFunctions(ManagedFunction left, ManagedFunction right);
 
 			virtual ManagedArgument operator()(ManagedArgument arg);
 			virtual ManagedArgument clone();
 			virtual void toString(std::string& str);
-			ManagedArgument derivative(ManagedArgument x);
+			virtual ManagedArgument derivative(ManagedArgument x);
 		protected:
 		private:
 			ManagedFunction mLeft;

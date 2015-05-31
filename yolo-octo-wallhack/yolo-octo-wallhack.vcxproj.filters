@@ -75,8 +75,11 @@
     <ClCompile Include="piotr\math\math_function.cpp">
       <Filter>Piotr\Math</Filter>
     </ClCompile>
-    <ClCompile Include="MyForm.cpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="piotr\math\differenecoffunctions.cpp">
+      <Filter>Piotr\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="piotr\math\divisonoffunctions.cpp">
+      <Filter>Piotr\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,12 +137,21 @@
     <ClInclude Include="Graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="piotr\math\differenceoffunctions.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="piotr\math\divisionoffunctions.h">
+      <Filter>Piotr\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Input.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="Output.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graph.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
   </ItemGroup>

@@ -49,6 +49,9 @@ namespace Piotr
 			void ifStatement(const std::string& str);
 			void allocateFunction(const std::string& str);
 			void drawGraph2D(const std::string& str);
+			void expandTaylor(const std::string& str);
+			void countDerivative(const std::string& str);
+			void makeAlias(const std::string& str);
 
 			////
 

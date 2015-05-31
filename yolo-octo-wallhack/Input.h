@@ -20,6 +20,7 @@ namespace yolo_octo_wallhack {
 	using namespace System::Drawing;
 	using namespace Piotr;
 	using namespace Math;
+	using namespace System::IO;
 
 	inline std::string toStringFromManaged(System::String^ str)
 	{
@@ -83,6 +84,13 @@ namespace yolo_octo_wallhack {
 	private: System::Windows::Forms::ToolStripMenuItem^  runToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  compileAndRunToolStripMenuItem;
 	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  loadToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem1;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
+	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog1;
 
 	protected:
 
@@ -101,19 +109,26 @@ namespace yolo_octo_wallhack {
 		{
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->toolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->loadToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->runToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->compileAndRunToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->helpToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
 			// 
 			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->toolStripMenuItem1,
-					this->runToolStripMenuItem
+					this->runToolStripMenuItem, this->helpToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -123,15 +138,32 @@ namespace yolo_octo_wallhack {
 			// 
 			// toolStripMenuItem1
 			// 
-			this->toolStripMenuItem1->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->exitToolStripMenuItem });
+			this->toolStripMenuItem1->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->saveToolStripMenuItem,
+					this->loadToolStripMenuItem, this->exitToolStripMenuItem
+			});
 			this->toolStripMenuItem1->Name = L"toolStripMenuItem1";
-			this->toolStripMenuItem1->Size = System::Drawing::Size(154, 24);
-			this->toolStripMenuItem1->Text = L"toolStripMenuItem1";
+			this->toolStripMenuItem1->Size = System::Drawing::Size(44, 24);
+			this->toolStripMenuItem1->Text = L"File";
+			// 
+			// saveToolStripMenuItem
+			// 
+			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(114, 24);
+			this->saveToolStripMenuItem->Text = L"Save";
+			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::saveToolStripMenuItem_Click);
+			// 
+			// loadToolStripMenuItem
+			// 
+			this->loadToolStripMenuItem->Name = L"loadToolStripMenuItem";
+			this->loadToolStripMenuItem->Size = System::Drawing::Size(114, 24);
+			this->loadToolStripMenuItem->Text = L"Open";
+			this->loadToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::loadToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(102, 24);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(114, 24);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::exitToolStripMenuItem_Click);
 			// 
@@ -145,9 +177,33 @@ namespace yolo_octo_wallhack {
 			// compileAndRunToolStripMenuItem
 			// 
 			this->compileAndRunToolStripMenuItem->Name = L"compileAndRunToolStripMenuItem";
-			this->compileAndRunToolStripMenuItem->Size = System::Drawing::Size(188, 24);
-			this->compileAndRunToolStripMenuItem->Text = L"Compile and run";
+			this->compileAndRunToolStripMenuItem->Size = System::Drawing::Size(103, 24);
+			this->compileAndRunToolStripMenuItem->Text = L"Run";
 			this->compileAndRunToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::compileAndRunToolStripMenuItem_Click);
+			// 
+			// helpToolStripMenuItem
+			// 
+			this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->aboutToolStripMenuItem,
+					this->helpToolStripMenuItem1
+			});
+			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
+			this->helpToolStripMenuItem->Size = System::Drawing::Size(53, 24);
+			this->helpToolStripMenuItem->Text = L"Help";
+			// 
+			// aboutToolStripMenuItem
+			// 
+			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
+			this->aboutToolStripMenuItem->Size = System::Drawing::Size(175, 24);
+			this->aboutToolStripMenuItem->Text = L"About";
+			this->aboutToolStripMenuItem->Click += gcnew System::EventHandler(this, &Input::aboutToolStripMenuItem_Click);
+			// 
+			// helpToolStripMenuItem1
+			// 
+			this->helpToolStripMenuItem1->Name = L"helpToolStripMenuItem1";
+			this->helpToolStripMenuItem1->Size = System::Drawing::Size(175, 24);
+			this->helpToolStripMenuItem1->Text = L"Help";
+			this->helpToolStripMenuItem1->Click += gcnew System::EventHandler(this, &Input::helpToolStripMenuItem1_Click);
 			// 
 			// textBox1
 			// 
@@ -168,6 +224,17 @@ namespace yolo_octo_wallhack {
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(282, 223);
 			this->textBox1->TabIndex = 1;
+			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->DefaultExt = L"ppp";
+			this->openFileDialog1->FileName = L"openFileDialog1";
+			this->openFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Input::openFileDialog1_FileOk);
+			// 
+			// saveFileDialog1
+			// 
+			this->saveFileDialog1->DefaultExt = L"ppp";
+			this->saveFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Input::saveFileDialog1_FileOk);
 			// 
 			// Input
 			// 
@@ -210,6 +277,42 @@ private: System::Void compileAndRunToolStripMenuItem_Click(System::Object^  send
 	stringInterpreter.showLog();
 	stringInterpreter.showResult();
 	
+}
+private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	saveFileDialog1->ShowDialog();
+	
+	
+}
+private: System::Void loadToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	openFileDialog1->ShowDialog();
+}
+private: System::Void openFileDialog1_FileOk(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) {
+	auto stream = openFileDialog1->OpenFile();
+	System::IO::StreamReader streamreader(stream);
+	String^ t;
+	String^ out;
+	while ((t = streamreader.ReadLine()) != nullptr)
+	{
+		out += t;
+		out += Environment::NewLine;
+	}
+	this->textBox1->Text = out;
+}
+private: System::Void saveFileDialog1_FileOk(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) {
+	auto stream = saveFileDialog1->OpenFile();
+	System::IO::StreamWriter streamwriter(stream);
+	for (int i = 0; i < textBox1->Lines->Length; i++)
+	{
+		streamwriter.WriteLine(textBox1->Lines[i]);
+	}
+}
+private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	Output^ about = gcnew Output("Sample Text");
+	about->Show();
+}
+private: System::Void helpToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e) {
+	Output^ help = gcnew Output("This is a premium feature.");
+	help->Show();
 }
 };
 

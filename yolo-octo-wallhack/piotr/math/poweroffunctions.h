@@ -16,6 +16,7 @@ namespace Piotr
 			virtual ManagedArgument operator()(ManagedArgument arg);
 			virtual ManagedArgument clone();
 			virtual void toString(std::string& str);
+			virtual ManagedArgument derivative(ManagedArgument x);
 		protected:
 		private:
 			ManagedFunction mLeft;
